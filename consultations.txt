@@ -1,0 +1,33 @@
+1. 
+SELECT id_foyer 
+FROM Souscrire_à 
+WHERE id_contrat=25
+
+2. 
+SELECT id_livraison 
+FROM Livraison
+JOIN Date
+USING id_livraison
+WHERE Date.mois=12
+
+ou
+
+SELECT id_livraison 
+FROM Livraison
+WHERE date_livraison >= "01/12" 
+AND date_livraison <= "31/12"
+
+3.
+SELECT id_livraison
+FROM Livraison
+WHERE id_foyer IS NULL
+
+4.
+SELECT Sa.id_contrat,date_livraison
+FROM Souscrire_à Sa
+JOIN Prévision_calendrier 
+USING id_contrat
+JOIN Livraison
+USING id_livraison
+WHERE id_foyer=42
+ORDER BY date_livraison
