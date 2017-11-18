@@ -1,76 +1,127 @@
 -- ============================================================
---   Nom de la base   :  CINEMA                                
+--   Nom de la base   :  AMAP                                
 --   Nom de SGBD      :  ORACLE Version 7.0                    
---   Date de creation :  30/10/96  12:09                       
+--   Date de creation :  18/11/17                       
 -- ============================================================
 
-drop table ROLE cascade constraints;
 
-drop table FILM cascade constraints;
-
-drop table REALISATEUR cascade constraints;
-
-drop table ACTEUR cascade constraints;
 
 -- ============================================================
---   Table : ACTEUR                                            
+--   Table : adresse                                       
 -- ============================================================
-create table ACTEUR
+
+DROP TABLE IF EXISTS adresse;
+CREATE TABLE adresse
 (
-    NUMERO_ACTEUR                   NUMBER(3)              not null,
-    NOM_ACTEUR                      CHAR(20)               not null,
-    PRENOM_ACTEUR                   CHAR(20)                       ,
-    NATION_ACTEUR                   CHAR(20)                       ,
-    DATE_DE_NAISSANCE               DATE                           ,
-    constraint pk_acteur primary key (NUMERO_ACTEUR)
+	id_adresse	NUMBER(10)	NOT NULL,
+	pays		VARCHAR(50)	NOT NULL,
+	ville		VARCHAR(50)	NOT NULL,
+	code_postal	VARCHAR(50)	NOT NULL,
+	rue		VARCHAR(50)	NOT NULL,
+	numero_rue	VARCHAR(50)	NOT NULL,
+
+	CONSTRAINT pk_adresse PRIMARY KEY (id_adresse)
 );
 
+
+
+
+
+
 -- ============================================================
---   Table : REALISATEUR                                       
+--   Table : foyer                                            
 -- ============================================================
-create table REALISATEUR
+
+DROP TABLE IF EXISTS foyer;
+CREATE TABLE foyer
 (
-    NUMERO_REALISATEUR              NUMBER(3)              not null,
-    NOM_REALISATEUR                 CHAR(20)               not null,
-    PRENOM_REALISATEUR              CHAR(20)                       ,
-    NATION_REALISATEUR              CHAR(20)                       ,
-    constraint pk_realisateur primary key (NUMERO_REALISATEUR)
+	id_foyer	NUMBER(10)	NOT NULL,
+	
+	id_adresse	NUMBER(10)		,
+	
+	nom		VARCHAR(50)		,
+	description	VARCHAR(1000)		,
+	adresse_mail	VARCHAR(50)		,
+	telephone	VARCHAR(50)		,
+
+	CONSTRAINT pk_foyer PRIMARY KEY (id_foyer)
 );
 
+
+
 -- ============================================================
---   Table : FILM                                              
+--   Table : client                                       
 -- ============================================================
-create table FILM
+
+DROP TABLE IF EXISTS client;
+CREATE TABLE client
 (
-    NUMERO_FILM                     NUMBER(3)              not null,
-    TITRE_FILM                      CHAR(30)               not null,
-    DATE_DE_SORTIE                  DATE                           ,
-    DUREE                           NUMBER(3)              not null,
-    GENRE                           CHAR(20)               not null,
-    NUMERO_REALISATEUR              NUMBER(3)              not null,
-    constraint pk_film primary key (NUMERO_FILM)
+	id_client	NUMBER(10)	NOT NULL,
+	
+	id_adresse	NUMBER(10)		,
+	
+	nom		VARCHAR(50)	NOT NULL,
+	prenom		VARCHAR(50)	NOT NULL,
+	adresse_mail	VARCHAR(50)	NOT NULL,
+	telephone	VARCHAR(50)		,
+
+	CONSTRAINT pk_client PRIMARY KEY (id_client)
 );
 
+
+
 -- ============================================================
---   Table : ROLE                                              
+--   Table : appartenir_a                                              
 -- ============================================================
-create table ROLE
+
+DROP TABLE IF EXISTS appartenir_a;
+CREATE TABLE appartenir_a
 (
-    NUMERO_ACTEUR                   NUMBER(3)              not null,
-    NUMERO_FILM                     NUMBER(3)              not null,
-    NOM_DU_ROLE                     CHAR(30)                       ,
-    constraint pk_role primary key (NUMERO_ACTEUR, NUMERO_FILM)
+    id_client	NUMBER(10)	NOT NULL,
+    id_foyer	NUMBER(10)	NOT NULL
 );
 
-alter table FILM
-    add constraint fk1_film foreign key (NUMERO_REALISATEUR)
-       references REALISATEUR (NUMERO_REALISATEUR);
 
-alter table ROLE
-    add constraint fk1_role foreign key (NUMERO_ACTEUR)
-       references ACTEUR (NUMERO_ACTEUR);
 
-alter table ROLE
-    add constraint fk2_role foreign key (NUMERO_FILM)
-       references FILM (NUMERO_FILM);
 
+
+-- ============================================================
+--   Table : producteur                                              
+-- ============================================================
+
+DROP TABLE IF EXISTS producteur;
+CREATE TABLE producteur
+(
+    id_producteur	NUMBER(10)	NOT NULL,
+    
+    id_adresse		NUMBER(10)	NOT NULL,
+    
+    prenom		VARCHAR(50)	NOT NULL,
+    adresse_mail	VARCHAR(50)	NOT NULL,
+    telephone		VARCHAR(50)		,
+    ordre_reglement	VARCHAR(50)	NOT NULL,
+
+    CONSTRAINT pk_producteur PRIMARY KEY (id_producteur)
+);
+
+
+-- ============================================================
+--   Table : contrat       
+-- ============================================================
+
+
+DROP TABLE IF EXISTS contrat;
+CREATE TABLE contrat
+(
+	id_contrat		NUMBER(10)	NOT NULL,
+
+	id_producteur		NUMBER(10)	NOT NULL,
+
+	nb_max_adherents	NUMBER(10)	NOT NULL,
+	prix_total		NUMBER(10)	NOT NULL,
+	nb_min_paiements	NUMBER(10)	NOT NULL,
+	nb_max_paiements	NUMBER(10)	NOT NULL,
+
+	CONSTRAINT pk_contrat PRIMARY KEY (id_contrat)
+);
+	
