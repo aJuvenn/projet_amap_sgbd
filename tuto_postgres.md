@@ -5,12 +5,15 @@
  1. Installe postgres avec ton package manager préféré (pacman, aptitude...)
 
  _NB : Les étapes suivantes semblent ne pas être nécessaires pour certains systèmes_
+ 
  2. Connecte-toi en tant qu'utilisateur postgres `sudo -u postgres -i`
+ 
  3. Initialise le cluster de bases de données :
  
  ```initdb --locale $LANG -E UTF8 -D '/var/lib/postgres/data'```
  
- _NB : tu peux changer l'encodage UTF8 si tu veux. Changer la racine est plus relou..._ 
+ _NB : tu peux changer l'encodage UTF8 si tu veux. Changer la racine est plus relou..._
+ 
  4. Démarre le service `postgresql.service` avec `systemctl start postgresql.service`. Tu peux faire `systemctl enable postgresql.service` si tu veux que le service démarre tout seul au démarrage de l'ordinateur.
 
 ## Installation ailleurs
