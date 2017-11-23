@@ -13,6 +13,9 @@
  ```initdb --locale $LANG -E UTF8 -D '/var/lib/postgres/data'```
  
  _NB : tu peux changer l'encodage UTF8 si tu veux. Changer la racine est plus relou..._
+
+sur Ubuntu :
+pg_ctlcluster 9.5 main start
  
  4. Démarre le service `postgresql.service` avec `systemctl start postgresql.service`. Tu peux faire `systemctl enable postgresql.service` si tu veux que le service démarre tout seul au démarrage de l'ordinateur.
 
