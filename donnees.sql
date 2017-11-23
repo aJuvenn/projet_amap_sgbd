@@ -150,10 +150,10 @@ commit ;
 --    verification des donnees
 -- ============================================================
 
-select count(*),'= 37 ?','ACTEUR' from ACTEUR 
+select count(*),'= 37 ?','ACTEUR' from ACTEUR
 union
-select count(*),'= 20 ?','FILM' from FILM 
+select count(*),'= 20 ?','FILM' from FILM
 union
-select count(*),'= 14 ?','REALISATEUR' from REALISATEUR 
+select count(*),'= 14 ?','REALISATEUR' from REALISATEUR
 union
 select count(*),'= 40 ?','ROLE' from ROLE ;

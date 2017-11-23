@@ -1,0 +1,7 @@
+1.
+SELECT c.id_client, COUNT (l.id_foyer)
+FROM client c,livraison l
+JOIN foyer f
+USING id_foyer
+JOIN appartenir_a
+USING id_foyer

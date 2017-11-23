@@ -18,8 +18,8 @@ CREATE TABLE adresse
 	pays			VARCHAR(50)		NOT NULL,
 	ville			VARCHAR(50)		NOT NULL,
 	code_postal		VARCHAR(50)		NOT NULL,
-	rue				VARCHAR(50)		NOT NULL,
 	numero_rue		VARCHAR(50)		NOT NULL,
+	rue				VARCHAR(50)		NOT NULL,
 
 	CONSTRAINT pk_adresse PRIMARY KEY (id_adresse)
 );
