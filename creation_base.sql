@@ -13,7 +13,7 @@
 DROP TABLE IF EXISTS adresse;
 CREATE TABLE adresse
 (
-	id_adresse		NUMBER(10)		NOT NULL,
+	id_adresse		INTEGER(10)		NOT NULL,
 
 	pays			VARCHAR(50)		NOT NULL,
 	ville			VARCHAR(50)		NOT NULL,
@@ -31,9 +31,9 @@ CREATE TABLE adresse
 DROP TABLE IF EXISTS foyer;
 CREATE TABLE foyer
 (
-	id_foyer		NUMBER(10)		NOT NULL,
+	id_foyer		INTEGER(10)		NOT NULL,
 
-	id_adresse		NUMBER(10)				,
+	id_adresse		INTEGER(10)				,
 
 	nom				VARCHAR(50)				,
 	description		VARCHAR(1000)			,
@@ -55,9 +55,9 @@ CREATE TABLE foyer
 DROP TABLE IF EXISTS client;
 CREATE TABLE client
 (
-	id_client		NUMBER(10)		NOT NULL,
+	id_client		INTEGER(10)		NOT NULL,
 
-	id_adresse		NUMBER(10)				,
+	id_adresse		INTEGER(10)				,
 
 	nom				VARCHAR(50)		NOT NULL,
 	prenom			VARCHAR(50)		NOT NULL,
@@ -79,8 +79,8 @@ CREATE TABLE client
 DROP TABLE IF EXISTS appartenir_a;
 CREATE TABLE appartenir_a
 (
-    id_client		NUMBER(10)		NOT NULL,
-    id_foyer		NUMBER(10)		NOT NULL,
+    id_client		INTEGER(10)		NOT NULL,
+    id_foyer		INTEGER(10)		NOT NULL,
 
     CONSTRAINT pk_appartenir_a PRIMARY KEY (id_client,id_foyer),
 
@@ -101,9 +101,9 @@ CREATE TABLE appartenir_a
 DROP TABLE IF EXISTS producteur;
 CREATE TABLE producteur
 (
-    id_producteur	NUMBER(10)		NOT NULL,
+    id_producteur	INTEGER(10)		NOT NULL,
 
-    id_adresse		NUMBER(10)		NOT NULL,
+    id_adresse		INTEGER(10)		NOT NULL,
 
     prenom			VARCHAR(50)		NOT NULL,
     adresse_mail	VARCHAR(50)		NOT NULL,
@@ -125,14 +125,14 @@ CREATE TABLE producteur
 DROP TABLE IF EXISTS contrat;
 CREATE TABLE contrat
 (
-	id_contrat			NUMBER(10)		NOT NULL,
+	id_contrat			INTEGER(10)		NOT NULL,
 
-	id_producteur		NUMBER(10)		NOT NULL,
+	id_producteur		INTEGER(10)		NOT NULL,
 
-	nb_max_adherents	NUMBER(10)		NOT NULL,
-	prix_total			NUMBER(10)		NOT NULL,
-	nb_min_paiements	NUMBER(10)		NOT NULL,
-	nb_max_paiements	NUMBER(10)		NOT NULL,
+	nb_max_adherents	INTEGER(10)		NOT NULL,
+	prix_total			INTEGER(10)		NOT NULL,
+	nb_min_paiements	INTEGER(10)		NOT NULL,
+	nb_max_paiements	INTEGER(10)		NOT NULL,
 
 	CONSTRAINT pk_contrat PRIMARY KEY (id_contrat),
 
@@ -152,11 +152,11 @@ CREATE TABLE contrat
 DROP TABLE IF EXISTS souscrire_a;
 CREATE TABLE souscrire_a
 (
-	id_foyer			NUMBER(10)		NOT NULL,
-	id_contrat			NUMBER(10)		NOT NULL,
+	id_foyer			INTEGER(10)		NOT NULL,
+	id_contrat			INTEGER(10)		NOT NULL,
 
-	nb_paiements		NUMBER(10)		NOT NULL,
-	nb_souscriptions	NUMBER(10) 		NOT NULL,
+	nb_paiements		INTEGER(10)		NOT NULL,
+	nb_souscriptions	INTEGER(10) 		NOT NULL,
 
 	CONSTRAINT pk_souscrire_a PRIMARY KEY (id_foyer,id_contrat),
 
@@ -179,7 +179,7 @@ CREATE TABLE souscrire_a
 DROP TABLE IF EXISTS denree;
 CREATE TABLE denree
 (
-	id_denree		NUMBER(10)		NOT NULL,
+	id_denree		INTEGER(10)		NOT NULL,
 
 	nom				VARCHAR(50)		NOT NULL,
 	description		VARCHAR(1000)			,
@@ -197,7 +197,7 @@ CREATE TABLE denree
 DROP TABLE IF EXISTS panier;
 CREATE TABLE panier
 (
-	id_panier		NUMBER(10)		NOT NULL,
+	id_panier		INTEGER(10)		NOT NULL,
 
 	nom				VARCHAR(50)				,
 	description		VARCHAR(1000)			,
@@ -215,10 +215,10 @@ CREATE TABLE panier
 DROP TABLE IF EXISTS contenir;
 CREATE TABLE contenir
 (
-	id_panier		NUMBER(10)		NOT NULL,
-	id_denree		NUMBER(10)		NOT NULL,
+	id_panier		INTEGER(10)		NOT NULL,
+	id_denree		INTEGER(10)		NOT NULL,
 
-	quantité		NUMBER(10)		NOT NULL,
+	quantité		INTEGER(10)		NOT NULL,
 
 	CONSTRAINT pk_contenir PRIMARY KEY (id_panier,id_denree),
 
@@ -238,10 +238,10 @@ CREATE TABLE contenir
 DROP TABLE IF EXISTS livraison;
 CREATE TABLE livraison
 (
-    id_livraison		NUMBER(10)		NOT NULL,
+    id_livraison		INTEGER(10)		NOT NULL,
 
-    id_adresse			NUMBER(10)		NOT NULL,
-    id_foyer			NUMBER(10)				,
+    id_adresse			INTEGER(10)		NOT NULL,
+    id_foyer			INTEGER(10)				,
 
     date_livraison		DATE					,
 
@@ -264,11 +264,11 @@ CREATE TABLE livraison
 DROP TABLE IF EXISTS prevision_calendrier;
 CREATE TABLE prevision_calendrier
 (
-    id_contrat		NUMBER(10)		NOT NULL,
-    id_livraison 	NUMBER(10)		NOT NULL,
-    id_panier 		NUMBER(10)		NOT NULL,
+    id_contrat		INTEGER(10)		NOT NULL,
+    id_livraison 	INTEGER(10)		NOT NULL,
+    id_panier 		INTEGER(10)		NOT NULL,
 
-    quantité		NUMBER(10)		NOT NULL,
+    quantité		INTEGER(10)		NOT NULL,
 
 
     CONSTRAINT pk_prevision_calendrier PRIMARY KEY (id_contrat,id_livraison,id_panier),
