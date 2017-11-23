@@ -18,7 +18,7 @@ DELETE FROM contrat;
 DELETE FROM producteur;
 DELETE FROM adresse;
 
-commit ;
+commit;
 
 -- ============================================================
 --    creation des donnees
@@ -26,34 +26,50 @@ commit ;
 
 -- adresse
 
-INSERT INTO adresse VALUES (1 , 'France', 'Roquefort-sur-Soulzon', '12250', '12', 'rue des Baragnaudes') ;
-INSERT INTO adresse VALUES (2 , 'France', 'Bordeaux', '33800', '35', 'Pauline Kergomard') ;
+INSERT INTO adresse VALUES (1 , 'France', 'Roquefort-sur-Soulzon', '12250', '12', 'rue des Baragnaudes');
+INSERT INTO adresse VALUES (2 , 'France', 'Bordeaux', '33800', '35', 'Pauline Kergomard');
 
-commit ;
+commit;
 
 -- producteur
 
-INSERT INTO producteur VALUES (1 , 1, 'Roquefort', 'Jean', '0464646464', '12', 'Mr Roquefort') ;
+INSERT INTO producteur VALUES (1 , 1, 'Roquefort', 'Jean', '0464646464', '12', 'Mr Roquefort');
 
-commit ;
+commit;
 
 -- contrat
 
-INSERT INTO contrat VALUES (1 , 1, 50, 200, 1, 4) ;
+INSERT INTO contrat VALUES (1 , 1, 50, 200, 1, 4);
 
-commit ;
+commit;
 
 -- foyer
 
-INSERT INTO foyer VALUES (1 , 2, 'Eirb', 'On brasse', 'eirb@enseirb-matmeca.fr', '0556565656') ;
+INSERT INTO foyer VALUES (1 , 2, 'Eirb', 'On brasse', 'eirb@enseirb-matmeca.fr', '0556565656');
 
-commit ;
+commit;
 
 -- client
 
-INSERT INTO client VALUES (1 , 2, 'Volte', 'Arsène', '0464646464', '12', 'Mr Roquefort') ;
+INSERT INTO client VALUES (1 , 2, 'Volte', 'Arsène', '0464646464', '12', 'Mr Roquefort');
 
-commit ;
+commit;
+
+-- livraison
+
+INSERT INTO livraison VALUES  (1, 2, 1, '2017-11-27 10:30:00');
+
+-- panier
+
+-- denree
+
+-- appartenir_a
+
+-- contenir
+
+-- souscrire_a
+
+-- prevision_calendrier
 
 -- ============================================================
 --    verification des donnees
