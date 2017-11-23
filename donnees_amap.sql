@@ -27,6 +27,7 @@ commit ;
 -- adresse
 
 INSERT INTO adresse VALUES (1 , 'France', 'Roquefort-sur-Soulzon', '12250', '12', 'rue des Baragnaudes') ;
+INSERT INTO adresse VALUES (2 , 'France', 'Bordeaux', '33800', '35', 'Pauline Kergomard') ;
 
 commit ;
 
@@ -39,6 +40,18 @@ commit ;
 -- contrat
 
 INSERT INTO contrat VALUES (1 , 1, 50, 200, 1, 4) ;
+
+commit ;
+
+-- foyer
+
+INSERT INTO foyer VALUES (1 , 2, 'Eirb', 'On brasse', 'eirb@enseirb-matmeca.fr', '0556565656') ;
+
+commit ;
+
+-- client
+
+INSERT INTO client VALUES (1 , 2, 'Volte', 'Arsène', '0464646464', '12', 'Mr Roquefort') ;
 
 commit ;
 
