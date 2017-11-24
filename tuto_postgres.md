@@ -19,6 +19,10 @@ pg_ctlcluster 9.5 main start
  
  4. Démarre le service `postgresql.service` avec `systemctl start postgresql.service`. Tu peux faire `systemctl enable postgresql.service` si tu veux que le service démarre tout seul au démarrage de l'ordinateur.
 
+sur Ubuntu : 
+sudo /etc/init.d/postgresql start pour démarrer le service
+/!\ Faire cela avant de se connecter à la base de données
+
 ## Installation ailleurs
 
 Je sais pas
