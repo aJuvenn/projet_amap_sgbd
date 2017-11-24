@@ -27,14 +27,14 @@ commit;
 -- adresse
 
 INSERT INTO adresse VALUES (1 , 'France', 'Roquefort-sur-Soulzon', '12250', '12', 'rue des Baragnaudes');
-INSERT INTO adresse VALUES (2 , 'France', 'Bordeaux', '33800', '35', 'rue Pauline Kergomard');
+INSERT INTO adresse VALUES (2 , 'France', 'Bordeaux', '33800', '127', 'rue Pizza Saint-Genès');
 INSERT INTO adresse VALUES (3 , 'France', 'Talence', '33400', '1', 'avenue du Dr Albert Schweitzer');
 
 commit;
 
 -- producteur
 
-INSERT INTO producteur VALUES (1 , 1, 'Roquefort', 'Jean', '0464646464', '12', 'Mr Roquefort');
+INSERT INTO producteur VALUES (1 , 1, 'Jean', 'jeannot@laposte.net', '0777777777','Mr Roquefort');
 
 commit;
 
@@ -47,13 +47,13 @@ commit;
 -- foyer
 
 INSERT INTO foyer VALUES (1 , 3, 'Eirb', 'On brasse', 'eirb@enseirb-matmeca.fr', '0556565656');
-INSERT INTO foyer VALUES (2 , 2, 'Pizza-flat', 'Superbe villa', 'avolte001@enseirb-matmeca.fr', '0666666666');
+INSERT INTO foyer VALUES (2 , 2, 'Pizza-flat', 'Superbe villa', 'arseneleboss@gmail.com', '0464646464');
 
 commit;
 
 -- client
 
-INSERT INTO client VALUES (1 , 2, 'Volte', 'Arsène', '0464646464', '12', 'Mr Roquefort');
+INSERT INTO client VALUES (1 , 2, 'Volte', 'Arsène', 'arseneleboss@gmail.com' ,'0666666666');
 
 commit;
 
