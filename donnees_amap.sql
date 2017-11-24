@@ -66,7 +66,7 @@ commit;
 -- panier
 
 INSERT INTO panier VALUES (1, 'terroir occitan', 'contient un ensemble de produits traditionnels du Midi');
-INSERT INTO panier VALUES (2, 'terroir auvergnat', 'contient un ensemble de produits traditionnels d\'Auvergne');
+INSERT INTO panier VALUES (2, 'terroir auvergnat', 'contient un ensemble de produits traditionnels d Auvergne');
 
 commit;
 
@@ -92,7 +92,7 @@ INSERT INTO denree VALUES (14, 'lentille verte', 'du Puy-en-Velay', 'g');
 INSERT INTO denree VALUES (15, 'verveine', '', 'u');
 INSERT INTO denree VALUES (16, 'liqueur de Gentiane', 'marque : Salers', 'u');
 INSERT INTO denree VALUES (17, 'terrines de campagne', 'une flopée de gôuts différents', 'u');
-INSERT INTO denree VALUES (18, 'Bleu', 'd\'Auvergne', 'g');
+INSERT INTO denree VALUES (18, 'Bleu', 'd Auvergne', 'g');
 
 commit;
 
