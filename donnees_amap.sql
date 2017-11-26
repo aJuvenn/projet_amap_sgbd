@@ -27,20 +27,23 @@ commit;
 -- adresse
 
 INSERT INTO adresse VALUES (1 , 'France', 'Roquefort-sur-Soulzon', '12250', '12', 'rue des Baragnaudes');
-INSERT INTO adresse VALUES (2 , 'France', 'Bordeaux', '33800', '127', 'rue Pizza Saint-Genès');
+INSERT INTO adresse VALUES (2 , 'France', 'Bordeaux', '33000', '127', 'rue Pizza Saint-Genès');
 INSERT INTO adresse VALUES (3 , 'France', 'Talence', '33400', '1', 'avenue du Dr Albert Schweitzer');
+INSERT INTO adresse VALUES (4 , 'Autriche', 'Salzburg', '00000', '7', 'boulevard des Turcs');
 
 commit;
 
 -- producteur
 
-INSERT INTO producteur VALUES (1 , 1, 'Jean', 'jeannot@laposte.net', '0777777777','Mr Roquefort');
+INSERT INTO producteur VALUES (1 , 1, 'Jean', 'jeannot@laposte.net', '0777777777','M Roquefort');
+INSERT INTO producteur VALUES (1 , 4, 'Mozart', 'wolfgang@amadeus.req', '0654321000','Figaro');
 
 commit;
 
 -- contrat
 
 INSERT INTO contrat VALUES (1 , 1, 50, 200, 1, 4);
+INSERT INTO contrat VALUES (2 , 2, 40, 180, 2, 3);
 
 commit;
 
@@ -78,7 +81,7 @@ INSERT INTO denree VALUES (2, 'haricot', 'Tarbais', 'g');
 INSERT INTO denree VALUES (3, 'raisin', 'Chasselas', 'g');
 INSERT INTO denree VALUES (4, 'melon', 'du Quercy', 'u');
 INSERT INTO denree VALUES (5, 'prune', 'Reine-Claude', 'g');
-INSERT INTO denree VALUES (6, 'noix', 'Périgord', 'L');
+INSERT INTO denree VALUES (6, 'noix', 'Périgord', 'g');
 INSERT INTO denree VALUES (7, 'roquefort', 'issue des caves Papillon', 'g');
 INSERT INTO denree VALUES (8, 'bleu', 'des Causses', 'g');
 INSERT INTO denree VALUES (9, 'Laguiole', '', 'g');
@@ -104,7 +107,32 @@ commit;
 
 -- contenir
 
+-- panier 1
+INSERT INTO contenir VALUES (1, 1, 100);
+INSERT INTO contenir VALUES (1, 2, 300);
+INSERT INTO contenir VALUES (1, 5, 200);
+-- panier 2
+INSERT INTO contenir VALUES (2, 3, 400);
+INSERT INTO contenir VALUES (2, 8, 100);
+INSERT INTO contenir VALUES (2, 4, 2);
+-- panier 3
+INSERT INTO contenir VALUES (3, 9, 130);
+INSERT INTO contenir VALUES (3, 6, 400);
+INSERT INTO contenir VALUES (3, 10, 180);
+INSERT INTO contenir VALUES (3, 1, 100);
+-- panier 4
+INSERT INTO contenir VALUES (4, 11, 200);
+INSERT INTO contenir VALUES (4, 15, 1);
+INSERT INTO contenir VALUES (4, 14, 300);
+INSERT INTO contenir VALUES (4, 17, 3);
+
+commit;
+
+
 -- souscrire_a
+
+INSERT INTO souscrire_a VALUES (1, 1, 3, 20);
+INSERT INTO souscrire_a VALUES (2, 2, 4, 30);
 
 -- prevision_calendrier
 

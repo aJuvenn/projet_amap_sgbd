@@ -121,7 +121,6 @@ CREATE TABLE producteur
 --   Table : contrat
 -- ============================================================
 
-
 DROP TABLE IF EXISTS contrat;
 CREATE TABLE contrat
 (
