@@ -105,6 +105,8 @@ CREATE TABLE producteur
 
     id_adresse		INTEGER		NOT NULL,
 
+
+		nom         VARCHAR(50)   NOT NULL,
     prenom			VARCHAR(50)		NOT NULL,
     adresse_mail	VARCHAR(50)		NOT NULL,
     telephone		VARCHAR(50)				,

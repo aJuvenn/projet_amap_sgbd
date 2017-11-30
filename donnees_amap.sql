@@ -5,7 +5,7 @@
 -- Tables définies par des couples/triplets de clefs étrangères
 DELETE FROM prevision_calendrier;
 DELETE FROM souscrire_a;
-DELETE FROM contenir; 
+DELETE FROM contenir;
 DELETE FROM appartenir_a;
 
 -- Tables référencées par les tables précédentes
@@ -35,8 +35,8 @@ commit;
 
 -- producteur
 
-INSERT INTO producteur VALUES (1 , 1, 'Jean', 'jeannot@laposte.net', '0777777777','M Roquefort');
-INSERT INTO producteur VALUES (1 , 4, 'Mozart', 'wolfgang@amadeus.req', '0654321000','Figaro');
+INSERT INTO producteur VALUES (1 , 1, 'Bonneau', 'Jean', 'jeannot@laposte.net', '0777777777','M Roquefort');
+INSERT INTO producteur VALUES (1 , 4, 'Ella', 'Mozart', 'wolfgang@amadeus.req', '0654321000','Figaro');
 
 commit;
 
@@ -134,7 +134,13 @@ commit;
 INSERT INTO souscrire_a VALUES (1, 1, 3, 20);
 INSERT INTO souscrire_a VALUES (2, 2, 4, 30);
 
+commit;
+
 -- prevision_calendrier
+
+INSERT INTO prevision_calendrier VALUES (1, 1, 1, 3);
+
+commit;
 
 -- ============================================================
 --    verification des donnees
