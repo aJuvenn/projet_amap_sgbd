@@ -10,7 +10,7 @@
 --   Table : adresse
 -- ============================================================
 
-DROP TABLE IF EXISTS adresse;
+DROP  TABLE IF EXISTS adresse CASCADE;
 CREATE TABLE adresse
 (
 	id_adresse		INTEGER		NOT NULL,
@@ -28,7 +28,7 @@ CREATE TABLE adresse
 --   Table : foyer
 -- ============================================================
 
-DROP TABLE IF EXISTS foyer;
+DROP TABLE IF EXISTS foyer CASCADE;
 CREATE TABLE foyer
 (
 	id_foyer		INTEGER		NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE foyer
 --   Table : client
 -- ============================================================
 
-DROP TABLE IF EXISTS client;
+DROP TABLE IF EXISTS client CASCADE;
 CREATE TABLE client
 (
 	id_client		INTEGER		NOT NULL,
@@ -76,7 +76,7 @@ CREATE TABLE client
 --   Table : appartenir_a
 -- ============================================================
 
-DROP TABLE IF EXISTS appartenir_a;
+DROP TABLE IF EXISTS appartenir_a CASCADE;
 CREATE TABLE appartenir_a
 (
     id_client		INTEGER		NOT NULL,
@@ -98,7 +98,7 @@ CREATE TABLE appartenir_a
 --   Table : producteur
 -- ============================================================
 
-DROP TABLE IF EXISTS producteur;
+DROP TABLE IF EXISTS producteur CASCADE;
 CREATE TABLE producteur
 (
     id_producteur	INTEGER		NOT NULL,
@@ -123,7 +123,7 @@ CREATE TABLE producteur
 --   Table : contrat
 -- ============================================================
 
-DROP TABLE IF EXISTS contrat;
+DROP TABLE IF EXISTS contrat CASCADE;
 CREATE TABLE contrat
 (
 	id_contrat			INTEGER		NOT NULL,
@@ -150,7 +150,7 @@ CREATE TABLE contrat
 --   Table : souscrire_a
 -- ============================================================
 
-DROP TABLE IF EXISTS souscrire_a;
+DROP TABLE IF EXISTS souscrire_a CASCADE;
 CREATE TABLE souscrire_a
 (
 	id_foyer			INTEGER		NOT NULL,
@@ -177,7 +177,7 @@ CREATE TABLE souscrire_a
 --   Table : denree
 -- ============================================================
 
-DROP TABLE IF EXISTS denree;
+DROP TABLE IF EXISTS denree CASCADE;
 CREATE TABLE denree
 (
 	id_denree		INTEGER		NOT NULL,
@@ -195,7 +195,7 @@ CREATE TABLE denree
 --   Table : panier
 -- ============================================================
 
-DROP TABLE IF EXISTS panier;
+DROP TABLE IF EXISTS panier CASCADE;
 CREATE TABLE panier
 (
 	id_panier		INTEGER		NOT NULL,
@@ -213,7 +213,7 @@ CREATE TABLE panier
 --   Table : contenir
 -- ============================================================
 
-DROP TABLE IF EXISTS contenir;
+DROP TABLE IF EXISTS contenir CASCADE;
 CREATE TABLE contenir
 (
 	id_panier		INTEGER		NOT NULL,
@@ -236,7 +236,7 @@ CREATE TABLE contenir
 --   Table : livraison
 -- ============================================================
 
-DROP TABLE IF EXISTS livraison;
+DROP TABLE IF EXISTS livraison CASCADE;
 CREATE TABLE livraison
 (
     id_livraison		INTEGER		NOT NULL,
@@ -262,7 +262,7 @@ CREATE TABLE livraison
 --   Table : prevision_calendrier
 -- ============================================================
 
-DROP TABLE IF EXISTS prevision_calendrier;
+DROP TABLE IF EXISTS prevision_calendrier CASCADE;
 CREATE TABLE prevision_calendrier
 (
     id_contrat		INTEGER		NOT NULL,
