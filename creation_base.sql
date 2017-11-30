@@ -165,6 +165,7 @@ CREATE TABLE souscrire_a
 		REFERENCES foyer (id_foyer),
     CONSTRAINT fk2_souscrire_a FOREIGN KEY (id_contrat)
 		REFERENCES contrat (id_contrat)
+		--, CONSTRAINT nb_paiements BETWEEN (SELECT nb_min_paiements, nb_max_paiements FROM contrat ctr WHERE ctr.id_contrat = id_contrat)
 
 );
 
