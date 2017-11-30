@@ -5,7 +5,7 @@ WHERE id_contrat=25
 
 2.
 SELECT id_livraison
-FROM Livraison
+FROM livraison
 WHERE date_livraison >= "01/12"
 AND date_livraison <= "31/12"
 
@@ -17,7 +17,7 @@ WHERE id_foyer IS NULL
 4.
 SELECT sa.id_contrat,date_livraison
 FROM souscrire_a sa
-JOIN Prévision_calendrier
+JOIN prevision_calendrier
 USING id_contrat
 JOIN livraison
 USING id_livraison
