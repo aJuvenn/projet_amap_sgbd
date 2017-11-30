@@ -36,7 +36,7 @@ commit;
 -- producteur
 
 INSERT INTO producteur VALUES (1 , 1, 'Bonneau', 'Jean', 'jeannot@laposte.net', '0777777777','M Roquefort');
-INSERT INTO producteur VALUES (1 , 4, 'Ella', 'Mozart', 'wolfgang@amadeus.req', '0654321000','Figaro');
+INSERT INTO producteur VALUES (2 , 4, 'Ella', 'Mozart', 'wolfgang@amadeus.req', '0654321000','Figaro');
 
 commit;
 
@@ -63,6 +63,7 @@ commit;
 -- livraison
 
 INSERT INTO livraison VALUES (1, 2, 1, '2017-11-27 10:30:00');
+INSERT INTO livraison VALUES (2, 3, 1, '2017-12-02 14:30:00');
 
 commit;
 
@@ -139,12 +140,15 @@ commit;
 -- prevision_calendrier
 
 INSERT INTO prevision_calendrier VALUES (1, 1, 1, 3);
+INSERT INTO prevision_calendrier VALUES (2, 2, 2, 3);
 
 commit;
 
 -- ============================================================
 --    verification des donnees
 -- ============================================================
+
+
 
 /*
 select count(*),'= 37 ?','ACTEUR' from ACTEUR
