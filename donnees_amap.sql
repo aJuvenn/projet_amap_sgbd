@@ -71,6 +71,8 @@ commit;
 
 INSERT INTO panier VALUES (1, 'terroir occitan', 'contient un ensemble de produits traditionnels du Midi');
 INSERT INTO panier VALUES (2, 'terroir auvergnat', 'contient un ensemble de produits traditionnels d Auvergne');
+INSERT INTO panier VALUES (3, 'fourre-tout', 'contient un peut tout et surtout n importe quoi');
+INSERT INTO panier VALUES (4, 'fourre-tout', 'contient un peut tout et surtout n importe quoi');
 
 commit;
 
