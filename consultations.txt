@@ -17,7 +17,7 @@ WHERE id_foyer IS NULL
 4.
 SELECT sa.id_contrat,date_livraison
 FROM souscrire_a sa
-JOIN Prévision_calendrier
+JOIN prevision_calendrier
 USING id_contrat
 JOIN livraison
 USING id_livraison
