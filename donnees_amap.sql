@@ -44,6 +44,7 @@ commit;
 
 INSERT INTO contrat VALUES (1 , 1, 50, 200, 1, 4);
 INSERT INTO contrat VALUES (2 , 2, 40, 180, 2, 3);
+INSERT INTO contrat VALUES (3 , 2, 30, 250, 2, 6);
 
 commit;
 
@@ -134,8 +135,10 @@ commit;
 
 -- souscrire_a
 
-INSERT INTO souscrire_a VALUES (1, 1, 3, 20);
-INSERT INTO souscrire_a VALUES (2, 2, 4, 30);
+INSERT INTO souscrire_a VALUES (1, 1, 3, 1);
+INSERT INTO souscrire_a VALUES (1, 2, 4, 1);
+INSERT INTO souscrire_a VALUES (2, 2, 4, 1);
+INSERT INTO souscrire_a VALUES (2, 3, 4, 1);
 
 commit;
 
