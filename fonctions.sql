@@ -69,8 +69,8 @@ $$ LANGUAGE SQL;
 
 -- Somme des montants des tous les contrats souscrits pour chaque foyer
 
-CREATE OR REPLACE FUNCTION somme_montants_contrats()
-RETURNS TABLE(id_adherent INTEGER, somme_contrats BIGINT) STABLE AS
+CREATE OR REPLACE FUNCTION somme_montants_contrats_foyer()
+RETURNS TABLE(id_foyer INTEGER, somme_contrats BIGINT) STABLE AS
 $$
 SELECT f.id_foyer, SUM(prix_total) AS somme FROM foyer f
 JOIN souscrire_a USING (id_foyer)
@@ -79,6 +79,43 @@ GROUP BY f.id_foyer
 ORDER BY somme DESC
 $$ LANGUAGE SQL;
 
+-- Somme des montants des tous les contrats souscrits pour chaque adhérent
+
+CREATE OR REPLACE FUNCTION somme_montants_contrats_adherent()
+RETURNS TABLE(id_adherent INTEGER, somme_contrats BIGINT) STABLE AS
+$$
+SELECT id_client, SUM(prix_total) AS somme FROM foyer f
+JOIN souscrire_a USING (id_foyer)
+JOIN contrat USING (id_contrat)
+JOIN appartenir_a USING (id_foyer)
+JOIN client USING (id_client)
+GROUP BY id_client
+ORDER BY somme DESC
+$$ LANGUAGE SQL;
+
+-- Prix moyen du panier pour chaque contrat
+
+CREATE OR REPLACE FUNCTION prix_moyen_panier()
+RETURNS TABLE(id_contrat INTEGER, prix_moyen INTEGER) STABLE AS
+$$
+SELECT id_contrat, prix_total/quantité AS prix_moyen FROM contrat
+JOIN prevision_calendrier USING (id_contrat)
+GROUP BY id_contrat, prix_moyen
+ORDER BY prix_moyen DESC
+$$ LANGUAGE SQL;
+
+-- Revenu moyen par mois pour chaque producteur, pour une année donnée
+
+CREATE OR REPLACE FUNCTION revenu_moyen_mensuel()	
+RETURNS TABLE(id_producteur INTEGER, revenu_moyen BIGINT) STABLE AS
+$$
+SELECT p.id_producteur, SUM(prix_total*nb_souscriptions)/12 AS revenu_moyen FROM producteur p
+JOIN contrat USING (id_producteur)
+JOIN souscrire_a USING (id_contrat)
+JOIN foyer USING (id_foyer)
+GROUP BY p.id_producteur
+ORDER BY revenu_moyen DESC 
+$$ LANGUAGE SQL;
 -- Tests des fonctions --
 
 SELECT liste_foyers_contrat(2);
@@ -87,4 +124,7 @@ SELECT liste_livraisons_sans_inscriptions();
 SELECT calendrier_livraisons_contrats_adherent(1);
 SELECT calendrier_livraisons_contrats_foyer(1);
 SELECT nombre_participations_annee(2017);
-SELECT somme_montants_contrats();
+SELECT somme_montants_contrats_foyer();
+SELECT somme_montants_contrats_adherent();
+SELECT prix_moyen_panier();
+SELECT revenu_moyen_mensuel();
