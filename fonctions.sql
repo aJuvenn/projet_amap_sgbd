@@ -116,15 +116,248 @@ JOIN foyer USING (id_foyer)
 GROUP BY p.id_producteur
 ORDER BY revenu_moyen DESC 
 $$ LANGUAGE SQL;
--- Tests des fonctions --
+
+-- MISE A JOUR --
+
+-- Préliminaires --
+
+CREATE OR REPLACE FUNCTION max_id_adresse()
+RETURNS INTEGER AS
+$$
+SELECT MAX(id_adresse) FROM adresse 
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION max_id_denree()
+RETURNS INTEGER AS
+$$
+SELECT MAX(id_denree) FROM denree 
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION max_id_panier()
+RETURNS INTEGER AS
+$$
+SELECT MAX(id_panier) FROM panier
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION max_id_livraison()
+RETURNS INTEGER AS
+$$
+SELECT MAX(id_livraison) FROM livraison 
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION max_id_client()
+RETURNS INTEGER AS
+$$
+SELECT MAX(id_client) FROM client 
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION max_id_foyer()
+RETURNS INTEGER AS
+$$
+SELECT MAX(id_foyer) FROM foyer 
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION max_id_contrat()
+RETURNS INTEGER AS
+$$
+SELECT MAX(id_contrat) FROM contrat
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION max_id_producteur()
+RETURNS INTEGER AS
+$$
+SELECT MAX(id_producteur) FROM producteur 
+$$ LANGUAGE SQL;
+
+-- Ajouts --
+
+CREATE OR REPLACE FUNCTION ajout_adresse(id INTEGER, pays VARCHAR(50), ville VARCHAR(50), code_postal VARCHAR(50), numero_rue VARCHAR(50), rue VARCHAR(50))
+RETURNS VOID AS
+$$
+INSERT INTO adresse VALUES (id, pays, ville, code_postal, numero_rue, rue)
+$$ LANGUAGE SQL;
+
+-- Suppression --
+
+-- Supprimer une ligne correspondant à un id
+
+CREATE OR REPLACE FUNCTION supprime_adresse(id INTEGER)
+RETURNS VOID AS
+$$
+DELETE FROM adresse WHERE id_adresse=$1
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION supprime_denree(id INTEGER)
+RETURNS VOID AS
+$$
+DELETE FROM denree WHERE id_denree=$1
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION supprime_panier(id INTEGER)
+RETURNS VOID AS
+$$
+DELETE FROM panier WHERE id_panier=$1
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION supprime_livraison(id INTEGER)
+RETURNS VOID AS
+$$
+DELETE FROM livraison WHERE id_livraison=$1
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION supprime_client(id INTEGER)
+RETURNS VOID AS
+$$
+DELETE FROM client WHERE id_client=$1
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION supprime_foyer(id INTEGER)
+RETURNS VOID AS
+$$
+DELETE FROM foyer WHERE id_foyer=$1
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION supprime_contrat(id INTEGER)
+RETURNS VOID AS
+$$
+DELETE FROM contrat WHERE id_contrat=$1
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION supprime_producteur(id INTEGER)
+RETURNS VOID AS
+$$
+DELETE FROM producteur WHERE id_producteur=$1
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION supprimer_souscrire_a(id INTEGER, id_2 INTEGER)
+RETURNS VOID AS
+$$
+DELETE FROM souscrire_a WHERE id_foyer=$1 AND id_contrat=$2
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION supprimer_contenir(id INTEGER, id_2 INTEGER)
+RETURNS VOID AS
+$$
+DELETE FROM contenir WHERE id_panier=$1 AND id_denree=$2
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION supprimer_appartenir_a(id INTEGER, id_2 INTEGER)
+RETURNS VOID AS
+$$
+DELETE FROM appartenir_a WHERE id_client=$1 AND id_foyer=$2
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION supprimer_prevision_calendrier(id INTEGER, id_2 INTEGER, id_3 INTEGER)
+RETURNS VOID AS
+$$
+DELETE FROM prevision_calendrier WHERE id_contrat=$1 AND id_livraison=$2 AND id_panier=$3
+$$ LANGUAGE SQL;
+
+-- Supprimer une table entière
+
+CREATE OR REPLACE FUNCTION supprime_table_adresse()
+RETURNS VOID AS
+$$
+DELETE FROM adresse 
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION supprime_table_denree()
+RETURNS VOID AS
+$$
+DELETE FROM denree 
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION supprime_table_panier()
+RETURNS VOID AS
+$$
+DELETE FROM panier
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION supprime_table_livraison()
+RETURNS VOID AS
+$$
+DELETE FROM livraison
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION supprime_table_client()
+RETURNS VOID AS
+$$
+DELETE FROM client 
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION supprime_table_foyer()
+RETURNS VOID AS
+$$
+DELETE FROM foyer 
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION supprime_table_contrat()
+RETURNS VOID AS
+$$
+DELETE FROM contrat 
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION supprime_table_producteur()
+RETURNS VOID AS
+$$
+DELETE FROM producteur 
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION supprimer_table_souscrire_a()
+RETURNS VOID AS
+$$
+DELETE FROM souscrire_a 
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION supprimer_table_contenir()
+RETURNS VOID AS
+$$
+DELETE FROM contenir 
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION supprimer_table_appartenir_a()
+RETURNS VOID AS
+$$
+DELETE FROM appartenir_a 
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION supprimer_table_prevision_calendrier()
+RETURNS VOID AS
+$$
+DELETE FROM prevision_calendrier 
+$$ LANGUAGE SQL;
+
+-- Modification --
+
+
+-- TESTS --
+
+-- Consultations
 
 SELECT liste_foyers_contrat(2);
 SELECT liste_livraisons_mois(11);
 SELECT liste_livraisons_sans_inscriptions();
 SELECT calendrier_livraisons_contrats_adherent(1);
 SELECT calendrier_livraisons_contrats_foyer(1);
+
+-- Statistiques
+
 SELECT nombre_participations_annee(2017);
 SELECT somme_montants_contrats_foyer();
 SELECT somme_montants_contrats_adherent();
 SELECT prix_moyen_panier();
 SELECT revenu_moyen_mensuel();
+
+-- Mises à jour
+
+SELECT max_id_adresse();
+SELECT max_id_denree();
+SELECT max_id_panier();
+SELECT max_id_livraison();
+SELECT max_id_client();
+SELECT max_id_foyer();
+SELECT max_id_contrat();
+SELECT max_id_producteur();
+
+SELECT ajout_adresse(6,'Mexique','Tulum','','','');
+SELECT supprime_adresse(6);
