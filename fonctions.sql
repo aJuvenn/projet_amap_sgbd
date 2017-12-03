@@ -177,6 +177,19 @@ $$
 INSERT INTO adresse VALUES (id, pays, ville, code_postal, numero_rue, rue)
 $$ LANGUAGE SQL;
 
+CREATE OR REPLACE FUNCTION ajout_foyer(id INTEGER, id_adresse INTEGER, nom VARCHAR(50), description VARCHAR(1000), adresse_mail VARCHAR(50), telephone VARCHAR(50))
+RETURNS VOID AS
+$$
+INSERT INTO foyer VALUES (id, id_adresse, nom, description, adresse_mail, telephone)
+$$ LANGUAGE SQL;
+
+CREATE OR REPLACE FUNCTION ajout_client(id INTEGER, id_adresse INTEGER, nom VARCHAR(50), prenom VARCHAR(50), adresse_mail VARCHAR(50), telephone VARCHAR(50))
+RETURNS VOID AS
+$$
+INSERT INTO client VALUES (id, id_adresse, nom, prenom, adresse_mail, telephone)
+$$ LANGUAGE SQL;
+
+
 -- Suppression --
 
 -- Supprimer une ligne correspondant à un id
@@ -359,5 +372,10 @@ SELECT max_id_foyer();
 SELECT max_id_contrat();
 SELECT max_id_producteur();
 
-SELECT ajout_adresse(6,'Mexique','Tulum','','','');
-SELECT supprime_adresse(6);
+SELECT ajout_adresse(max_id_adresse()+1,'Mexique','Tulum','','','');
+SELECT ajout_foyer(max_id_foyer()+1,5,'Le foyer','un foyer','lol@xd.ptdr','0787546721');
+SELECT ajout_client(max_id_client()+1,4,'Racine','Jean','','');
+
+SELECT supprime_foyer(max_id_foyer());
+SELECT supprime_adresse(max_id_adresse());
+
