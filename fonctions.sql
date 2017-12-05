@@ -76,11 +76,14 @@ $$ LANGUAGE SQL;
 CREATE OR REPLACE FUNCTION nombre_participations_annee(annee INTEGER)
 RETURNS TABLE(id_foyer INTEGER, n_participations BIGINT) STABLE AS
 $$
-SELECT f.id_foyer, COUNT(DISTINCT id_livraison) AS n_participations FROM foyer f
-JOIN livraison USING (id_foyer)
-wHERE EXTRACT(year FROM date_livraison)=$1
-GROUP BY f.id_foyer
-ORDER BY n_participations DESC
+  SELECT f.id_foyer, 
+  	 COUNT(DISTINCT id_livraison) AS n_participations 
+	 FROM foyer f
+	      JOIN livraison 
+	      	   USING (id_foyer)
+		   	 WHERE EXTRACT(year FROM date_livraison)=$1
+			       GROUP BY f.id_foyer
+			       	     ORDER BY n_participations DESC
 $$ LANGUAGE SQL;
 
 -- Somme des montants des tous les contrats souscrits pour chaque foyer
@@ -88,11 +91,15 @@ $$ LANGUAGE SQL;
 CREATE OR REPLACE FUNCTION somme_montants_contrats_foyer()
 RETURNS TABLE(id_foyer INTEGER, somme_contrats BIGINT) STABLE AS
 $$
-SELECT f.id_foyer, SUM(prix_total) AS somme FROM foyer f
-JOIN souscrire_a USING (id_foyer)
-JOIN contrat USING (id_contrat)
-GROUP BY f.id_foyer
-ORDER BY somme DESC
+  SELECT f.id_foyer, 
+  	 SUM(prix_total) AS somme 
+	 FROM foyer f
+	      JOIN souscrire_a 
+	      	   USING (id_foyer)
+	      JOIN contrat 
+	      	   USING (id_contrat)
+		   	 GROUP BY f.id_foyer
+			       ORDER BY somme DESC
 $$ LANGUAGE SQL;
 
 -- Somme des montants des tous les contrats souscrits pour chaque adhérent
@@ -100,13 +107,19 @@ $$ LANGUAGE SQL;
 CREATE OR REPLACE FUNCTION somme_montants_contrats_adherent()
 RETURNS TABLE(id_adherent INTEGER, somme_contrats BIGINT) STABLE AS
 $$
-SELECT id_client, SUM(prix_total) AS somme FROM foyer f
-JOIN souscrire_a USING (id_foyer)
-JOIN contrat USING (id_contrat)
-JOIN appartenir_a USING (id_foyer)
-JOIN client USING (id_client)
-GROUP BY id_client
-ORDER BY somme DESC
+  SELECT id_client, 
+  	 SUM(prix_total) AS somme 
+	 FROM foyer f
+	      JOIN souscrire_a 
+	      	   USING (id_foyer)
+	      JOIN contrat 
+	      	   USING (id_contrat)
+              JOIN appartenir_a 
+	      	   USING (id_foyer)
+              JOIN client 
+	      	   USING (id_client)
+		   	 GROUP BY id_client
+			       ORDER BY somme DESC
 $$ LANGUAGE SQL;
 
 -- Prix moyen du panier pour chaque contrat
@@ -114,10 +127,14 @@ $$ LANGUAGE SQL;
 CREATE OR REPLACE FUNCTION prix_moyen_panier()
 RETURNS TABLE(id_contrat INTEGER, prix_moyen INTEGER) STABLE AS
 $$
-SELECT id_contrat, prix_total/quantité AS prix_moyen FROM contrat
-JOIN prevision_calendrier USING (id_contrat)
-GROUP BY id_contrat, prix_moyen
-ORDER BY prix_moyen DESC
+  SELECT id_contrat, 
+  	 prix_total/quantité AS prix_moyen 
+	 FROM contrat
+	      JOIN prevision_calendrier
+	      	   USING (id_contrat)
+		   	 GROUP BY id_contrat, 
+			       	  prix_moyen
+				  ORDER BY prix_moyen DESC
 $$ LANGUAGE SQL;
 
 -- Revenu moyen par mois pour chaque producteur, pour une année donnée
@@ -125,12 +142,17 @@ $$ LANGUAGE SQL;
 CREATE OR REPLACE FUNCTION revenu_moyen_mensuel()	
 RETURNS TABLE(id_producteur INTEGER, revenu_moyen BIGINT) STABLE AS
 $$
-SELECT p.id_producteur, SUM(prix_total*nb_souscriptions)/12 AS revenu_moyen FROM producteur p
-JOIN contrat USING (id_producteur)
-JOIN souscrire_a USING (id_contrat)
-JOIN foyer USING (id_foyer)
-GROUP BY p.id_producteur
-ORDER BY revenu_moyen DESC 
+  SELECT p.id_producteur, 
+  	 SUM(prix_total*nb_souscriptions)/12 AS revenu_moyen 
+	 FROM producteur p
+	      JOIN contrat
+	      	    USING (id_producteur)
+	      JOIN souscrire_a 
+	      	   USING (id_contrat)
+	      JOIN foyer
+	      	    USING (id_foyer)
+		    	  GROUP BY p.id_producteur
+			  	ORDER BY revenu_moyen DESC 
 $$ LANGUAGE SQL;
 
 -- MISE A JOUR --
