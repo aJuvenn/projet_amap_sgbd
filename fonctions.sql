@@ -5,7 +5,9 @@
 CREATE OR REPLACE FUNCTION liste_foyers_contrat (id_contrat INTEGER)
 RETURNS TABLE(id_foyer INTEGER) STABLE AS
 $$
-  SELECT id_foyer FROM souscrire_a WHERE id_contrat=$1;
+  SELECT id_foyer 
+  	 FROM souscrire_a 
+	      WHERE id_contrat=$1;
 $$ LANGUAGE SQL;
 
 
@@ -14,7 +16,9 @@ $$ LANGUAGE SQL;
 CREATE OR REPLACE FUNCTION liste_livraisons_mois (mois INTEGER)
 RETURNS TABLE(id_livraison INTEGER) STABLE AS
 $$
-SELECT id_livraison FROM livraison WHERE EXTRACT( month FROM date_livraison)=$1;
+  SELECT id_livraison 
+  	 FROM livraison 
+              WHERE EXTRACT(month FROM date_livraison)=$1;
 $$ LANGUAGE SQL;
 
 
@@ -23,7 +27,9 @@ $$ LANGUAGE SQL;
 CREATE OR REPLACE FUNCTION liste_livraisons_sans_inscriptions ()
 RETURNS TABLE(id_livraison INTEGER) STABLE AS
 $$
-SELECT id_livraison FROM livraison WHERE id_foyer IS NULL;
+  SELECT id_livraison 
+       FROM livraison 
+       	    WHERE id_foyer IS NULL;
 $$ LANGUAGE SQL;
 
 
@@ -32,13 +38,19 @@ $$ LANGUAGE SQL;
 CREATE OR REPLACE FUNCTION calendrier_livraisons_contrats_adherent(id_adherent INTEGER)
 RETURNS TABLE(id_contrat INTEGER, date_livraison DATE) STABLE AS
 $$
-SELECT sa.id_contrat, date_livraison FROM souscrire_a sa
-JOIN foyer USING (id_foyer)
-JOIN livraison USING (id_foyer)
-JOIN appartenir_a USING (id_foyer)
-JOIN client USING (id_client)
-WHERE id_client=$1
-ORDER BY date_livraison ASC
+  SELECT sa.id_contrat, 
+  	 date_livraison 
+	 FROM souscrire_a sa
+    	      JOIN foyer 
+       	      	   USING (id_foyer)
+   	      JOIN livraison 
+       	      	   USING (id_foyer)
+    	      JOIN appartenir_a 
+       	      	   USING (id_foyer)
+    	      JOIN client 
+      	      	    USING (id_client)
+    	   	    	   WHERE id_client=$1
+  	         	   	 ORDER BY date_livraison ASC
 $$ LANGUAGE SQL;
 
 -- Calendrier des livraisons de l'ensemble des contrats d'un foyer donné
@@ -46,11 +58,15 @@ $$ LANGUAGE SQL;
 CREATE OR REPLACE FUNCTION calendrier_livraisons_contrats_foyer(id_foyer INTEGER)
 RETURNS TABLE(id_contrat INTEGER, date_livraison DATE) STABLE AS
 $$
-SELECT sa.id_contrat, date_livraison FROM souscrire_a sa
-JOIN foyer f USING (id_foyer)
-JOIN livraison USING (id_foyer)
-WHERE f.id_foyer=$1
-ORDER BY date_livraison ASC
+  SELECT sa.id_contrat, 
+  	 date_livraison 
+	 FROM souscrire_a sa
+	      JOIN foyer f 
+	      	   USING (id_foyer)
+	      JOIN livraison 
+	      	   USING (id_foyer)
+		   	 WHERE f.id_foyer=$1
+			       ORDER BY date_livraison ASC
 $$ LANGUAGE SQL;
 
 -- STATISTIQUES --
