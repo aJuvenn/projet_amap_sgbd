@@ -281,3 +281,201 @@ CREATE TABLE prevision_calendrier
 	CONSTRAINT fk3_prevision_calendrier FOREIGN KEY (id_panier)
 		REFERENCES panier (id_panier)
 );
+
+
+
+
+
+
+
+-- ============================================================
+-- ============================================================
+--   					Triggers
+-- ============================================================
+-- ============================================================
+
+
+
+
+-- ============================================================
+--   Un foyer ne peut pas être volontaire pour une livraison
+-- 	 qui ne fait pas partie d'un des contrats pour lesquels
+--	 il a souscri.
+-- ============================================================
+
+CREATE OR REPLACE FUNCTION volontaire_est_legitime() 
+RETURNS TRIGGER AS 
+$volontaire_pour_livraison$
+BEGIN 
+
+	IF 
+		NEW.id_foyer IS NOT NULL 
+	AND  
+		NOT EXISTS
+		(
+			SELECT 
+				1,	
+			FROM 
+				prevision_calendrier pc
+				JOIN souscrire_a sa 
+					USING (id_contrat)
+			WHERE 
+				sa.id_foyer = NEW.id_foyer
+				AND pc.id_livraison = NEW.id_livraison
+		)	
+	THEN 
+		RAISE EXCEPTION 'Le foyer % ne peut pas se porter volontaire pour la livraison %', NEW.id_foyer, NEW.id_livraison ;
+	END IF;
+	
+	RETURN NEW;
+	
+END;
+$volontaire_pour_livraison$
+LANGUAGE plpgsql;
+	
+
+
+
+CREATE TRIGGER volontaire_pour_livraison
+(
+	BEFORE 
+		UPDATE OF id_foyer 	
+		OR INSERT 
+			ON livraison
+	FOR EACH ROW
+	EXECUTE PROCEDURE 
+		volontaire_est_legitime()
+);
+
+		
+		
+	
+		
+-- ============================================================
+--   Lors de la souscription à un contrat, un foyer
+--	 doit indiquer un nombre de paiement situé entre les bornes
+-- 	 précisées par le contrat.
+-- ============================================================
+		
+		
+	
+CREATE OR REPLACE FUNCTION nombre_de_paiements_valide() 
+RETURNS TRIGGER AS 
+$nombre_de_paiements$
+DECLARE 
+	nb_min_paiement INTEGER;
+	nb_max_paiment INTEGER;
+	
+BEGIN
+
+	SELECT 
+		nb_min_paiements,
+		nb_max_paiements 
+	INTO 
+		nb_min_paiement,
+		nb_max_paiment 
+	FROM 
+		contrat ctr 
+	WHERE 
+		ctr.id_contrat = NEW.id_contrat;
+	
+	IF 
+		NEW.nb_paiements < nb_min_paiement
+		OR NEW.nb_paiements > nb_max_paiment
+	THEN 
+		RAISE EXCEPTION 'Le foyer % ne peut souscrire au contrat % en % paiements', NEW.id_foyer, NEW.id_contrat, NEW.nb_paiements ;
+	END IF ;
+	
+	RETURN NEW;
+	
+END;
+$nombre_de_paiements$
+LANGUAGE plpgsql;
+		
+
+DROP TRIGGER IF EXISTS nombre_de_paiements ON souscrire_a;
+CREATE TRIGGER nombre_de_paiements
+	BEFORE 
+		UPDATE OF nb_paiements 
+		OR INSERT 
+			ON souscrire_a
+	FOR EACH ROW
+	EXECUTE PROCEDURE 
+		nombre_de_paiements_valide();
+		
+		
+		
+		
+		
+		
+
+-- ============================================================
+-- Il n'y a pas plus de souscriptions à un contrat que le
+-- nombre spécifié dans ce dernier.
+-- ============================================================	
+	
+
+		
+	
+CREATE OR REPLACE FUNCTION nombre_de_souscriptions_valide() 
+RETURNS TRIGGER AS 
+$nombre_de_souscriptions$
+DECLARE 
+	nb_max_souscription INTEGER;
+	nb_actuel INTEGER;
+BEGIN
+
+	SELECT
+		nb_max_adherents 
+	INTO 
+		nb_max_souscription 
+	FROM 
+		contrat ctr 
+	WHERE 
+		ctr.id_contrat = NEW.id_contrat;
+	
+		
+	SELECT 
+		SUM(nb_souscriptions) 
+	INTO 
+		nb_actuel
+	FROM 
+		souscrire_a sa 
+	WHERE 
+		sa.id_contrat = NEW.id_contrat 
+		AND sa.id_foyer != NEW.id_foyer ;
+		
+		
+	nb_actuel = COALESCE(nb_actuel,0);
+	
+	
+	IF nb_actuel + NEW.nb_souscriptions > nb_max_souscription
+	THEN 
+		RAISE EXCEPTION 
+			'Le foyer % ne peut souscrire % fois au contrat % car cela dépasse son nombre maximum de souscriptions.', 
+			NEW.id_foyer,
+			NEW.nb_souscriptions, 
+			NEW.id_contrat;
+	END IF;
+	
+	RETURN NEW;
+	
+END;
+$nombre_de_souscriptions$
+LANGUAGE plpgsql;
+		
+
+
+
+DROP TRIGGER IF EXISTS nombre_de_souscriptions ON souscrire_a;
+CREATE TRIGGER nombre_de_souscriptions
+	BEFORE 
+		UPDATE OF nb_souscriptions
+		OR INSERT 
+			ON souscrire_a
+	FOR EACH ROW
+	EXECUTE PROCEDURE 
+		nombre_de_souscriptions_valide();
+		
+		
+				
