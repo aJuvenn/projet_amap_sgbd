@@ -30,6 +30,7 @@ INSERT INTO adresse VALUES (1 , 'France', 'Roquefort-sur-Soulzon', '12250', '12'
 INSERT INTO adresse VALUES (2 , 'France', 'Bordeaux', '33000', '127', 'rue Pizza Saint-Genès');
 INSERT INTO adresse VALUES (3 , 'France', 'Talence', '33400', '1', 'avenue du Dr Albert Schweitzer');
 INSERT INTO adresse VALUES (4 , 'Autriche', 'Salzburg', '00000', '7', 'boulevard des Turcs');
+INSERT INTO adresse VALUES (5 , 'Mesopotamie', 'Babylone', '00000', '12', 'Porte d Ishtar');
 
 commit;
 
@@ -64,7 +65,8 @@ commit;
 -- livraison
 
 INSERT INTO livraison VALUES (1, 2, 1, '2017-11-27 10:30:00');
-INSERT INTO livraison VALUES (2, 3, 1, '2017-12-02 14:30:00');
+INSERT INTO livraison VALUES (2, 3, 2, '2017-12-02 14:30:00');
+INSERT INTO livraison VALUES (3, 5, NULL, '7777-07-07 07:07:07');
 
 commit;
 
