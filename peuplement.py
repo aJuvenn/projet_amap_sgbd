@@ -2,13 +2,12 @@ from io import *
 import random
 
 ### Options ###
-N_ADDRESSES = 100 # Doit être plus grand que le nombre de foyers/clients...
+N_ADDRESSES = 150 # Doit être plus grand que le nombre de foyers/clients...
 N_PRODUCERS = 10
 N_FOYERS = 30
 N_CLIENTS = 80
 N_CONTRACTS = 60
 
-#...
 ###############
 
 ### ADRESSES
@@ -28,7 +27,7 @@ streets = ['rue de la pizza', 'avenue des iris', 'rue des paquerettes', 'bouleva
 
 
 ### NOMS
-names = [('Ray','Defesse'), ('Jerry','Kan'), ('Juda','Bricot'), ('Jean','Bon'), ('Axel','Aire'), ('Vic','Tim'), ('Alain','Proviste'), ('Paul','Aroide'), ('Denis','Chon'), ('Kelly','Diote'), ('Igor','Gonzola'), ('Yves','Remord'), ('Armand','Chabalais'), ('Ali','Gator'), ('Alain','Térieur'), ('Alex','Térieur'), ('Bart','Habba'), ('Cécile','Hon'), ('Céline','Évitable'), ('Clément','Tine'), ('Élie','Coptère'), ('Élise','Émoi'), ('Jean','Registre'), ('Jeff','Hun'), ('Karl','Hage'), ('Laure','Dure')]
+names = [('Ray','Defesse'), ('Jerry','Kan'), ('Juda','Bricot'), ('Jean','Bon'), ('Axel','Aire'), ('Vic','Tim'), ('Alain','Proviste'), ('Paul','Aroide'), ('Denis','Chon'), ('Kelly','Diote'), ('Igor','Gonzola'), ('Yves','Remord'), ('Armand','Chabalais'), ('Ali','Gator'), ('Alain','Térieur'), ('Alex','Térieur'), ('Bart','Habba'), ('Cécile','Hon'), ('Céline','Évitable'), ('Clément','Tine'), ('Élie','Coptère'), ('Élise','Émoi'), ('Jean','Registre'), ('Jeff','Hun'), ('Karl','Hage'), ('Laure','Dure'), ('Marie', 'Tim'), ('Maude', 'Errateur'), ('Lydie', 'Commandements'), ('Nicolas', 'Niorangina'), ('Omer', 'Dalors'), ('Pat', 'Réloin'), ('Paul', 'Hochon'), ('Pit', 'Za'), ('Rob', 'Otique'), ('Roland', 'Culé'), ('Richard', 'Dasso'), ('Sacha', 'Hutte'), ('Sacha', 'Touille'), ('Sam', 'Lécasse'), ('Samantha', 'Lo'), ('Sandra', 'Nicouverture'), ('Sandy', 'Kilo'), ('Sarah', 'Croche'), ('Sarah', 'Pelle'), ('Serge', 'Oin'), ('Sylvie', 'Bromasseur'), ('Terry', 'Dicule'), ('Thierry', 'Gollo'), ('Yamamoto', 'Kaderate'), ('Emma', 'Carenna'), ('Candy', 'Raton')]
 
 domains = ['enseirb-matmeca.fr', 'coucou.com', 'bonjour.net', 'salut.fr', 'hello.org', 'yo.io', 'hey.com', 'bonsoir.net']
 
@@ -37,7 +36,7 @@ foyers = [('Enseirb-Matmeca', 'La meilleure école'), ('Pizza House', 'La maison
 ### PANIERS
 paniers = [('vegan', 'que des légumes (ou pas)'), ('carnivore', 'que de la viande (ou pas)'), ('équilibré', 'un peu de tout'), ('soussoupe', 'de bonnes choses pour faire une bonne soupe'), ('fromager', 'parce que ça a pas le goût de l odeur'), ('éco', 'ne coûte pas très cher (en théorie)'), ('salade', 'de quoi faire une bonne salade originale')]
 
-denrees = [('jambon', 'sans couenne', 'g'), ('laitue', 'fraîche', 'g'), ('lait', 'demi-écrémé', 'l'), ('gruyère', 'suisse', 'g'), ('pâtes', 'coquillettes', 'g'), ('tomate', 'coeur de boeuf', 'g'), ('confit d oignon', 'du vigan', 'g'), ('vin rouge', 'bordeaux', 'l'), ('oeufs', 'de poule', 'u'), ('pain', 'de campagne complet', 'g'), ('courgettes', 'verte', 'g'), ('poivrons', 'rouges, verts, jaunes', 'g'), ('gingembre', 'épicé', 'g'), ('carottes', 'riches en vitamines', 'g'), ('roquefort', 'très fort', 'g'), ('emmental', 'classique', 'g'), ('camembert', 'qui coule', 'g'), ('saucisses', 'chipos et merguez', 'g'), ('steaks', 'non hachés', 'g'), ('bananes', 'exotiques', 'g'), ('oranges', 'juteuses', 'g'), ('pommes', 'croquantes', 'g'), ('clémentines', 'vitaminées', 'g'), ('lait de soja', 'naturel', 'l'), ('chocolat', 'de suisse', 'g'), ('riz', 'basmati', 'g'), ('maïs', 'bien tendre', 'g'), ('fraises', 'juteuses', 'g'), ('abricots', 'du valais', 'g'), ('durian', 'qui sent pas bon', 'g'), ('farine', 'de sarrasin', 'g'), ('champignons', 'de Paris', 'g'), ('aubergines', 'violettes', 'g'), ('poulet', 'en filets', 'g'), ('viande des grisons', 'salée', 'g'), ('vin blanc', 'riesling', 'l'), ('vin rouge', 'bordeaux', 'l'), ('patates', 'de terre', 'g')]
+denrees = [('jambon', 'sans couenne', 'g'), ('laitue', 'fraîche', 'g'), ('lait', 'demi-écrémé', 'l'), ('gruyère', 'suisse', 'g'), ('pâtes', 'coquillettes', 'g'), ('tomate', 'coeur de boeuf', 'g'), ('confit d oignon', 'du vigan', 'g'), ('vin rouge', 'bordeaux', 'l'), ('oeufs', 'de poule', 'u'), ('pain', 'de campagne complet', 'g'), ('courgettes', 'verte', 'g'), ('poivrons', 'rouges, verts, jaunes', 'g'), ('gingembre', 'épicé', 'g'), ('carottes', 'riches en vitamines', 'g'), ('roquefort', 'très fort', 'g'), ('emmental', 'classique', 'g'), ('camembert', 'qui coule', 'g'), ('saucisses', 'chipos et merguez', 'g'), ('steaks', 'non hachés', 'g'), ('bananes', 'exotiques', 'g'), ('oranges', 'juteuses', 'g'), ('pommes', 'croquantes', 'g'), ('clémentines', 'vitaminées', 'g'), ('lait de soja', 'naturel', 'l'), ('chocolat', 'de suisse', 'g'), ('riz', 'basmati', 'g'), ('maïs', 'bien tendre', 'g'), ('fraises', 'juteuses', 'g'), ('abricots', 'du valais', 'g'), ('durian', 'qui sent pas bon', 'g'), ('farine', 'de sarrasin', 'g'), ('champignons', 'de Paris', 'g'), ('aubergines', 'violettes', 'g'), ('poulet', 'en filets', 'g'), ('viande des grisons', 'salée', 'g'), ('vin blanc', 'riesling', 'l'), ('vin rouge', 'bordeaux', 'l'), ('patates', 'de terre', 'g'), ('gigot', 'd agneau', 'g'), ('bavette', 'd Aloyau', 'g'), ('porc', 'caramelisé', 'g')]
 
 N_PANIERS = len(paniers)
 N_DENREES = len(denrees)
