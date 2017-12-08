@@ -336,15 +336,13 @@ LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS volontaire_pour_livraison ON livraison;
 CREATE TRIGGER volontaire_pour_livraison
-(
 	BEFORE 
 		UPDATE OF id_foyer 	
 		OR INSERT 
 			ON livraison
 	FOR EACH ROW
 	EXECUTE PROCEDURE 
-		volontaire_est_legitime()
-);
+		volontaire_est_legitime();
 
 		
 		
