@@ -313,7 +313,7 @@ BEGIN
 		NOT EXISTS
 		(
 			SELECT 
-				1,	
+				1	
 			FROM 
 				prevision_calendrier pc
 				JOIN souscrire_a sa 
@@ -334,7 +334,7 @@ LANGUAGE plpgsql;
 	
 
 
-
+DROP TRIGGER IF EXISTS volontaire_pour_livraison ON livraison;
 CREATE TRIGGER volontaire_pour_livraison
 (
 	BEFORE 
