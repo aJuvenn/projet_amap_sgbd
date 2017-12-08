@@ -160,7 +160,7 @@ def random_contract() :
 
     pid = str(random.randrange(1, N_PRODUCERS+1))
     n_max_adh = str(random.randrange(1, 100))
-    prix = str(random.randrange(4, 20) * int(n_max_adh))
+    prix = str(random.randrange(20, 100))
     n_max_pai = str(random.randrange(3, 10))
     n_min_pai = str(random.randrange(1, 4))
     res += 'INSERT INTO contrat VALUES (' + id + ', ' + pid + ', ' + n_max_adh + ', ' + prix + ', ' + n_min_pai + ', ' + n_max_pai + ');\n'
