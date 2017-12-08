@@ -154,11 +154,11 @@ CREATE TABLE souscrire_a
 (
 	id_foyer			INTEGER		NOT NULL,
 	id_contrat			INTEGER		NOT NULL,
-
 	nb_paiements		INTEGER		NOT NULL,
+	
 	nb_souscriptions	INTEGER 		NOT NULL,
 
-	CONSTRAINT pk_souscrire_a PRIMARY KEY (id_foyer,id_contrat),
+	CONSTRAINT pk_souscrire_a PRIMARY KEY (id_foyer,id_contrat,nb_paiements),
 
     CONSTRAINT fk1_souscrire_a FOREIGN KEY (id_foyer)
 		REFERENCES foyer (id_foyer),
