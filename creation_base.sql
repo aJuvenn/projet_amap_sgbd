@@ -1,7 +1,6 @@
 -- ============================================================
 --   Nom de la base   :  AMAP
---   Nom de SGBD      :  ORACLE Version 7.0
---   Date de creation :  18/11/17
+--   Nom de SGBD      :  POSTGRESQL
 -- ============================================================
 
 
@@ -479,3 +478,8 @@ CREATE TRIGGER nombre_de_souscriptions
 		
 		
 				
+				
+				
+				
+				
+COMMIT;				
