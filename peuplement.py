@@ -105,7 +105,9 @@ def random_foyer() :
 
 cli_id = 1
 free_addr_cli = list(range(1, N_ADDRESSES+1))
+free_foyers_cli = list(range(1, N_FOYERS+1))
 def random_client() :
+    res = ''
     global cli_id
     id = str(cli_id)
     cli_id += 1
@@ -118,7 +120,16 @@ def random_client() :
     prenom, nom = random.choice(names)
     phone = random_phone()
     email = prenom.lower() + nom.lower() + '@' + random.choice(domains)
-    return 'INSERT INTO client VALUES (' +  id + ', ' + aid + ', \'' + nom + '\', \'' + prenom + '\', \'' + email + '\', \'' + phone +  '\');\n'
+    res += 'INSERT INTO client VALUES (' +  id + ', ' + aid + ', \'' + nom + '\', \'' + prenom + '\', \'' + email + '\', \'' + phone +  '\');\n'
+
+    fid = str(random.randrange(1, N_FOYERS+1))
+    if (len(free_foyers_cli) != 0) :
+        i = random.randrange(0, len(free_foyers_cli))
+        fid = str(free_foyers_cli[i])
+        del free_foyers_cli[i]
+    res += 'INSERT INTO appartenir_a VALUES(' + id + ', ' + fid + ');\n'
+
+    return res
 
 livr_id = 1
 def random_livraison(fid, cid) :
