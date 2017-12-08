@@ -1,12 +1,13 @@
+#-*- coding: utf-8 -*-
 from io import *
 import random
 
 ### Options ###
-N_ADDRESSES = 150 # Doit être plus grand que le nombre de foyers/clients...
-N_PRODUCERS = 10
-N_FOYERS = 30
-N_CLIENTS = 80
-N_CONTRACTS = 60
+N_ADDRESSES = 15 # Doit etre plus grand que le nombre de foyers/clients...
+N_PRODUCERS = 2
+N_FOYERS = 3
+N_CLIENTS = 10
+N_CONTRACTS = 5
 
 ###############
 
