@@ -133,19 +133,19 @@ def random_livraison(fid, cid) :
     livr_id +=1
 
     aid = str(random.randrange(1, N_ADDRESSES +1))
-    if (random.random() < 0.04) :
+    if (random.random() < 0.2) :
         fid = 'NULL'
     
     date = '\'2018-' + '{:2>}'.format(str(random.randrange(1, 13))).replace(' ', '0') + '-' + '{:2>}'.format(str(random.randrange(1, 29))).replace(' ', '0') + ' ' + '{:2>}'.format(str(random.randrange(0, 24))).replace(' ', '0') + ':' + '{:2>}'.format(str(random.randrange(0, 60))).replace(' ', '0') + ':00\''
 
-    res += 'INSERT INTO livraison VALUES (' + id + ', ' + aid + ', ' + fid + ', ' + date + ');\n'
-    
-    if fid == 'NULL' :
-        return res
+    res += 'INSERT INTO livraison VALUES (' + id + ', ' + aid + ', ' + 'NULL' + ', ' + date + ');\n'
     
     pid = str(random.randrange(1, N_PANIERS +1))
     qtt = str(random.randrange(1, 100))
-    return res + 'INSERT INTO prevision_calendrier VALUES (' + cid + ', ' + id + ', ' + pid + ', ' + qtt + ');\n'
+    res += 'INSERT INTO prevision_calendrier VALUES (' + cid + ', ' + id + ', ' + pid + ', ' + qtt + ');\n'
+
+    res += 'UPDATE livraison SET id_foyer=' + fid + ' WHERE id_livraison=' + id + ';\n'
+    return res
 
 ctrt_id = 1
 def random_contract() :
