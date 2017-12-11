@@ -1,3 +1,4 @@
+#-*- coding: utf-8 -*-
 from appJar import gui
 import psycopg2
 import peuplement as ppl
