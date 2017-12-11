@@ -54,7 +54,24 @@ def init(n_addr, n_pdr, n_foy, n_cli, n_ctrt) :
     N_CLIENTS = n_cli
     global N_CONTRACTS
     N_CONTRACTS = n_ctrt
-    
+    global free_addr_cli
+    free_addr_cli = list(range(1, N_ADDRESSES+1))
+    global free_foyers_cli
+    free_foyers_cli = list(range(1, N_FOYERS+1))
+    global free_addr_foyer
+    free_addr_foyer = list(range(1, N_ADDRESSES+1))
+    global free_addr_prod
+    free_addr_prod = list(range(1, N_ADDRESSES+1))
+    global addr_id
+    addr_id = 1
+    global foyer_id
+    foyer_id = 1
+    global prod_id
+    prod_id = 1
+    global ctrt_id
+    ctrt_id = 1
+    global cli_id
+    cli_id = 1
 comment_block_separator = '-- ==================================================\n'
 def comment_block(str) :
     res = comment_block_separator
@@ -293,5 +310,6 @@ def peuplement() :
             f.write(random_contract())
         f.write('commit;\n\n')
 
+        
 if __name__ == "__main__" :
     peuplement()

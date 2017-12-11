@@ -87,7 +87,6 @@ def peupler(btn):
     try :
         with open("./peuplement.sql", 'r') as f:
             for line in f:
-                print(line)
                 if len(line)==0 or line.isspace() or line.startswith("--"):
                     continue
                 if line.startswith("commit"):
@@ -193,7 +192,9 @@ app.stopLabelFrame()
 app.stopTab()
 
 app.startTab("Consultation")
-app.addLabel("l2", "Rien pour le moment")
+app.startLabelFrame("lfcons1", hideTitle=True)
+
+app.stopLabelFrame()
 app.stopTab()
 
 app.startTab("Statistiques")
