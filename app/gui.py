@@ -350,11 +350,13 @@ app.setTextArea("sresult", "Ici le résultat des requêtes\n")
 app.stopTab()
 
 app.startTab("Ajout")
-app.addLabel("l4", "Rien pour le moment")
+app.addTextArea("l4")
+app.setTextArea("l4", "Rien pour le moment. Les fonctions d'ajout d'éléments ont été réalisées mais ne sont pas dans cette interface.\nElles peuvent néanmoins être utilisées manuellement par exemple dans l'interpréteur psql.")
 app.stopTab()
 
 app.startTab("Suppression")
-app.addLabel("l5", "Rien pour le moment")
+app.addTextArea("l5")
+app.setTextArea("l5", "Rien pour le moment. Les fonctions de suppression d'éléments ont été réalisées mais ne sont pas dans cette interface.\nElles peuvent néanmoins être utilisées manuellement par exemple dans l'interpréteur psql.")
 app.stopTab()
 
 app.setTabbedFrameDisableAllTabs("tf", disabled=True)
