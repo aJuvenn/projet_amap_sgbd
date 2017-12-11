@@ -56,11 +56,32 @@ $$ LANGUAGE SQL;
 -- Liste des livraisons pour lesquelles personne n'est inscrit
 
 CREATE OR REPLACE FUNCTION liste_livraisons_sans_inscriptions ()
-RETURNS TABLE(id_livraison INTEGER) STABLE AS
+RETURNS 
+TABLE(
+	id_livraison INTEGER,
+	date_livraison DATE, 
+		numero_rue VARCHAR, 
+		rue VARCHAR, 
+		code_postal VARCHAR, 
+		ville VARCHAR, 
+		pays VARCHAR
+) STABLE AS
 $$
-  SELECT id_livraison 
-       FROM livraison 
-       	    WHERE id_foyer IS NULL;
+  SELECT 
+ 	 id_livraison,
+ 	 date_livraison, 
+		numero_rue, 
+		rue, 
+		code_postal, 
+		ville, 
+		pays
+    FROM
+    	livraison 
+    	JOIN adresse
+    		USING (id_adresse)
+	WHERE 
+		id_foyer IS NULL;
+		
 $$ LANGUAGE SQL;
 
 
@@ -160,7 +181,7 @@ $$ LANGUAGE SQL;
 
 
 CREATE OR REPLACE FUNCTION nombre_participations_annee(annee INTEGER)
-RETURNS TABLE(id_foyer INTEGER, nb_participations BIGINT) STABLE AS
+RETURNS TABLE(nom VARCHAR, description VARCHAR, adresse_mail VARCHAR, nb_participations BIGINT) STABLE AS
 $$
 
 	WITH compte_des_participants AS
@@ -178,10 +199,12 @@ $$
 	)
 	
 	SELECT 
-		id_foyer,
+		f.nom,
+		f.description,
+		f.adresse_mail,
 		COALESCE(nb_participations,0) AS nb_participations
 	FROM 
-		foyer
+		foyer f
 		LEFT JOIN compte_des_participants
 			USING (id_foyer)
 			
@@ -197,7 +220,7 @@ $$ LANGUAGE SQL;
 -- Somme des montants des tous les contrats souscrits pour chaque foyer
 
 CREATE OR REPLACE FUNCTION somme_montants_contrats_foyer()
-RETURNS TABLE(id_foyer INTEGER, somme_contrats BIGINT) STABLE AS
+RETURNS TABLE(id_foyer INTEGER, nom VARCHAR, description VARCHAR, adresse_mail VARCHAR, somme_contrats BIGINT) STABLE AS
 $$
 
 	WITH somme_des_souscrivants AS 
@@ -215,9 +238,12 @@ $$
 	
 	SELECT 
 		id_foyer,
+		f.nom,
+		f.description,
+		f.adresse_mail,
 		COALESCE(somme,0) AS somme_contrats
 	FROM
-		foyer
+		foyer f
 		LEFT JOIN somme_des_souscrivants
 			USING (id_foyer)
 	ORDER BY 
@@ -236,7 +262,8 @@ $$ LANGUAGE SQL;
 CREATE OR REPLACE FUNCTION somme_montants_contrats_adherent()
 RETURNS TABLE(id_adherent INTEGER, somme_contrats BIGINT) STABLE AS
 $$
-  SELECT id_client, 
+  SELECT 
+  	id_client,
   	 SUM(prix_total) AS somme 
 	 FROM foyer f
 	      JOIN souscrire_a 
@@ -245,11 +272,14 @@ $$
 	      	   USING (id_contrat)
               JOIN appartenir_a 
 	      	   USING (id_foyer)
-              JOIN client 
+              JOIN client c
 	      	   USING (id_client)
 		   	 GROUP BY id_client
 			       ORDER BY somme DESC
 $$ LANGUAGE SQL;
+
+
+
 
 
 
@@ -276,10 +306,14 @@ $$ LANGUAGE SQL;
 -- Revenu moyen par mois pour chaque producteur, pour une année donnée
 	
 CREATE OR REPLACE FUNCTION revenu_moyen_mensuel()	
-RETURNS TABLE(id_producteur INTEGER, revenu_moyen NUMERIC) STABLE AS
+RETURNS TABLE(id_producteur INTEGER, prenom VARCHAR, nom VARCHAR, adresse_mail VARCHAR, revenu_moyen NUMERIC) STABLE AS
 $$
-  SELECT p.id_producteur, 
-  	 SUM(prix_total*nb_souscriptions) :: NUMERIC /12. AS revenu_moyen 
+  SELECT 
+  	p.id_producteur,
+  	p.prenom,
+  	p.nom,
+  	p.adresse_mail,
+  	SUM(prix_total*nb_souscriptions) :: NUMERIC /12. AS revenu_moyen 
 	 FROM producteur p
 	      JOIN contrat
 	      	    USING (id_producteur)
@@ -289,6 +323,14 @@ $$
 	 		p.id_producteur
 			  	ORDER BY revenu_moyen DESC 
 $$ LANGUAGE SQL;
+
+
+	
+
+ 
+	
+
+
 
 -- MISE A JOUR --
 
@@ -439,6 +481,9 @@ $$
 DELETE FROM prevision_calendrier WHERE id_contrat=$1 AND id_livraison=$2 AND id_panier=$3
 $$ LANGUAGE SQL;
 
+
+
+
 -- Supprimer une table entière
 
 CREATE OR REPLACE FUNCTION supprime_table_adresse()
@@ -515,40 +560,4 @@ $$ LANGUAGE SQL;
 
 -- Modification --
 
-
--- TESTS --
-
--- Consultations
-
-SELECT liste_foyers_contrat(2);
-SELECT liste_livraisons_mois(11);
-SELECT liste_livraisons_sans_inscriptions();
-SELECT calendrier_livraisons_contrats_adherent(1);
-SELECT calendrier_livraisons_contrats_foyer(1);
-
--- Statistiques
-
-SELECT nombre_participations_annee(2017);
-SELECT somme_montants_contrats_foyer();
-SELECT somme_montants_contrats_adherent();
-SELECT prix_moyen_panier();
-SELECT revenu_moyen_mensuel();
-
--- Mises à jour
-
-SELECT max_id_adresse();
-SELECT max_id_denree();
-SELECT max_id_panier();
-SELECT max_id_livraison();
-SELECT max_id_client();
-SELECT max_id_foyer();
-SELECT max_id_contrat();
-SELECT max_id_producteur();
-
-SELECT ajout_adresse(max_id_adresse()+1,'Mexique','Tulum','','','');
-SELECT ajout_foyer(max_id_foyer()+1,5,'Le foyer','un foyer','lol@xd.ptdr','0787546721');
-SELECT ajout_client(max_id_client()+1,4,'Racine','Jean','','');
-
-SELECT supprime_foyer(max_id_foyer());
-SELECT supprime_adresse(max_id_adresse());
 
