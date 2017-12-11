@@ -17,4 +17,4 @@ Module qui permet de communiquer avec PostgreSQL, il peut s'installer via `pip` 
 Aller dans le dossier app et faire `python gui.py`
 
 ### Une fois lancé
-C'est assez graphique, pour se connecter à la base de données, il faut utiliser des identifiants valides dans PostgreSQL et le nom donné à la base de données AMAP lorsque vous l'avez crée.
+C'est assez graphique, pour se connecter à la base de données, il faut utiliser des identifiants valides dans PostgreSQL et le nom donné à la base de données AMAP lorsque vous l'avez créée.
