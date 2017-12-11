@@ -3,22 +3,53 @@
 -- Liste des foyers ayant souscrits à un contrat donné
 
 CREATE OR REPLACE FUNCTION liste_foyers_contrat (id_contrat INTEGER)
-RETURNS TABLE(id_foyer INTEGER) STABLE AS
+RETURNS TABLE(id_foyer INTEGER, nom VARCHAR, description VARCHAR, adresse_mail VARCHAR, telephone VARCHAR) STABLE AS
 $$
-  SELECT id_foyer 
-  	 FROM souscrire_a 
-	      WHERE id_contrat=$1;
+	SELECT DISTINCT
+		id_foyer,
+		f.nom,
+		f.description,
+		f.adresse_mail,
+		f.telephone
+	FROM 
+		souscrire_a
+		JOIN foyer f
+			USING (id_foyer)
+	WHERE
+		id_contrat = $1;
 $$ LANGUAGE SQL;
+
 
 
 -- Liste des livraisons prévues à un mois
 
 CREATE OR REPLACE FUNCTION liste_livraisons_mois (mois INTEGER)
-RETURNS TABLE(id_livraison INTEGER) STABLE AS
+RETURNS TABLE
+	(
+		id_livraison INTEGER, 
+		date_livraison DATE, 
+		numero_rue VARCHAR, 
+		rue VARCHAR, 
+		code_postal VARCHAR, 
+		ville VARCHAR, 
+		pays VARCHAR
+	)STABLE AS
 $$
-  SELECT id_livraison 
-  	 FROM livraison 
-              WHERE EXTRACT(month FROM date_livraison)=$1;
+	SELECT 
+		id_livraison,
+		l.date_livraison,
+		a.numero_rue,
+		a.rue,
+		a.code_postal,
+		a.ville,
+		a.pays
+	FROM 
+		livraison l
+		JOIN adresse a
+			USING (id_adresse)
+    WHERE 
+    	EXTRACT(month FROM date_livraison) = $1;
+    	
 $$ LANGUAGE SQL;
 
 
@@ -36,71 +67,169 @@ $$ LANGUAGE SQL;
 -- Calendrier des livraisons de l'ensemble des contrats d'un adhérent donné
 
 CREATE OR REPLACE FUNCTION calendrier_livraisons_contrats_adherent(id_adherent INTEGER)
-RETURNS TABLE(id_contrat INTEGER, date_livraison DATE) STABLE AS
+RETURNS 
+	TABLE(
+		id_contrat INTEGER, 
+		date_livraison DATE, 
+		numero_rue VARCHAR, 
+		rue VARCHAR, 
+		code_postal VARCHAR, 
+		ville VARCHAR, 
+		pays VARCHAR
+	) STABLE AS
 $$
-  SELECT sa.id_contrat, 
-  	 date_livraison 
-	 FROM souscrire_a sa
-    	      JOIN foyer 
-       	      	   USING (id_foyer)
-   	      JOIN livraison 
-       	      	   USING (id_foyer)
-    	      JOIN appartenir_a 
-       	      	   USING (id_foyer)
-    	      JOIN client 
-      	      	    USING (id_client)
-    	   	    	   WHERE id_client=$1
-  	         	   	 ORDER BY date_livraison ASC
+	SELECT DISTINCT
+  		sa.id_contrat, 
+  		liv.date_livraison,
+		numero_rue, 
+		rue, 
+		code_postal, 
+		ville, 
+		pays
+  		
+	FROM 
+		prevision_calendrier pc
+		JOIN souscrire_a sa
+			ON pc.id_contrat = sa.id_contrat
+		JOIN appartenir_a appa
+			ON sa.id_foyer = sa.id_foyer
+		JOIN livraison liv
+			ON liv.id_livraison = pc.id_livraison
+		JOIN adresse adr
+			ON adr.id_adresse = liv.id_adresse
+			
+	WHERE 
+		id_client = $1
+		
+	ORDER BY
+		liv.date_livraison ASC
+		
 $$ LANGUAGE SQL;
+
+
+
 
 -- Calendrier des livraisons de l'ensemble des contrats d'un foyer donné
 
 CREATE OR REPLACE FUNCTION calendrier_livraisons_contrats_foyer(id_foyer INTEGER)
-RETURNS TABLE(id_contrat INTEGER, date_livraison DATE) STABLE AS
+RETURNS TABLE(id_contrat INTEGER, 
+nom VARCHAR,
+prneom VARCHAR,
+date_livraison DATE, 
+numero_rue VARCHAR,
+rue VARCHAR,
+code_postal VARCHAR, 
+ville VARCHAR, 
+pays VARCHAR) STABLE AS
 $$
-  SELECT sa.id_contrat, 
-  	 date_livraison 
-	 FROM souscrire_a sa
-	      JOIN foyer f 
-	      	   USING (id_foyer)
-	      JOIN livraison 
-	      	   USING (id_foyer)
-		   	 WHERE f.id_foyer=$1
-			       ORDER BY date_livraison ASC
+	SELECT DISTINCT
+  		sa.id_contrat,
+  		p.nom,
+  		p.prenom,
+  		liv.date_livraison,
+  		adr.numero_rue, 
+  		adr.rue, 
+		adr.code_postal, 
+		adr.ville, 
+		adr.pays
+  		
+	FROM 
+		prevision_calendrier pc
+		JOIN souscrire_a sa
+			ON pc.id_contrat = sa.id_contrat
+		JOIN livraison liv
+			ON liv.id_livraison = pc.id_livraison
+		JOIN adresse adr
+			ON adr.id_adresse = liv.id_adresse
+		JOIN contrat c
+			ON c.id_contrat = pc.id_contrat
+		JOIN producteur p
+			ON p.id_producteur = c.id_producteur
+			
+	WHERE 
+		sa.id_foyer = $1
+		
+	ORDER BY
+		liv.date_livraison ASC
+		
 $$ LANGUAGE SQL;
 
 -- STATISTIQUES --
 
 -- Liste des foyers, avec pour chaque foyer, son nombre de participations à des distributions pour une année donnée
 
+
 CREATE OR REPLACE FUNCTION nombre_participations_annee(annee INTEGER)
-RETURNS TABLE(id_foyer INTEGER, n_participations BIGINT) STABLE AS
+RETURNS TABLE(id_foyer INTEGER, nb_participations BIGINT) STABLE AS
 $$
-  SELECT f.id_foyer, 
-  	 COUNT(DISTINCT id_livraison) AS n_participations 
-	 FROM foyer f
-	      JOIN livraison 
-	      	   USING (id_foyer)
-		   	 WHERE EXTRACT(year FROM date_livraison)=$1
-			       GROUP BY f.id_foyer
-			       	     ORDER BY n_participations DESC
+
+	WITH compte_des_participants AS
+	(
+		SELECT 
+			id_foyer,
+			count(*) AS nb_participations
+		FROM 
+			livraison
+		WHERE 
+			EXTRACT(YEAR FROM date_livraison) = $1
+		
+		GROUP BY
+			id_foyer
+	)
+	
+	SELECT 
+		id_foyer,
+		COALESCE(nb_participations,0) AS nb_participations
+	FROM 
+		foyer
+		LEFT JOIN compte_des_participants
+			USING (id_foyer)
+			
+	ORDER BY
+		nb_participations DESC
+	
 $$ LANGUAGE SQL;
 
+
+
+
+	
 -- Somme des montants des tous les contrats souscrits pour chaque foyer
 
 CREATE OR REPLACE FUNCTION somme_montants_contrats_foyer()
 RETURNS TABLE(id_foyer INTEGER, somme_contrats BIGINT) STABLE AS
 $$
-  SELECT f.id_foyer, 
-  	 SUM(prix_total) AS somme 
-	 FROM foyer f
-	      JOIN souscrire_a 
-	      	   USING (id_foyer)
-	      JOIN contrat 
-	      	   USING (id_contrat)
-		   	 GROUP BY f.id_foyer
-			       ORDER BY somme DESC
+
+	WITH somme_des_souscrivants AS 
+	(
+		SELECT 
+			id_foyer,
+			SUM(prix_total * nb_souscriptions) AS somme
+		FROM 
+			souscrire_a
+			JOIN contrat
+				USING (id_contrat)
+		GROUP BY 
+			id_foyer
+	)
+	
+	SELECT 
+		id_foyer,
+		COALESCE(somme,0) AS somme_contrats
+	FROM
+		foyer
+		LEFT JOIN somme_des_souscrivants
+			USING (id_foyer)
+	ORDER BY 
+		somme DESC ;
+	
 $$ LANGUAGE SQL;
+
+
+
+
+	
+	
 
 -- Somme des montants des tous les contrats souscrits pour chaque adhérent
 
@@ -122,36 +251,42 @@ $$
 			       ORDER BY somme DESC
 $$ LANGUAGE SQL;
 
+
+
 -- Prix moyen du panier pour chaque contrat
 
 CREATE OR REPLACE FUNCTION prix_moyen_panier()
-RETURNS TABLE(id_contrat INTEGER, prix_moyen INTEGER) STABLE AS
+RETURNS TABLE(id_contrat INTEGER, prix_moyen NUMERIC) STABLE AS
 $$
-  SELECT id_contrat, 
-  	 prix_total/quantité AS prix_moyen 
-	 FROM contrat
-	      JOIN prevision_calendrier
-	      	   USING (id_contrat)
-		   	 GROUP BY id_contrat, 
-			       	  prix_moyen
-				  ORDER BY prix_moyen DESC
+	SELECT 
+		id_contrat,
+		prix_total :: NUMERIC / SUM(quantité) :: NUMERIC AS prix_moyen
+	FROM 
+		prevision_calendrier
+		JOIN contrat
+			USING (id_contrat)
+	GROUP BY 
+		id_contrat,
+		prix_total
+	ORDER BY 
+		prix_moyen DESC
+		
 $$ LANGUAGE SQL;
 
 -- Revenu moyen par mois pour chaque producteur, pour une année donnée
-
+	
 CREATE OR REPLACE FUNCTION revenu_moyen_mensuel()	
-RETURNS TABLE(id_producteur INTEGER, revenu_moyen BIGINT) STABLE AS
+RETURNS TABLE(id_producteur INTEGER, revenu_moyen NUMERIC) STABLE AS
 $$
   SELECT p.id_producteur, 
-  	 SUM(prix_total*nb_souscriptions)/12 AS revenu_moyen 
+  	 SUM(prix_total*nb_souscriptions) :: NUMERIC /12. AS revenu_moyen 
 	 FROM producteur p
 	      JOIN contrat
 	      	    USING (id_producteur)
 	      JOIN souscrire_a 
 	      	   USING (id_contrat)
-	      JOIN foyer
-	      	    USING (id_foyer)
-		    	  GROUP BY p.id_producteur
+	 GROUP BY 
+	 		p.id_producteur
 			  	ORDER BY revenu_moyen DESC 
 $$ LANGUAGE SQL;
 
