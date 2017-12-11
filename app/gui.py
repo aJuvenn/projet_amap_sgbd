@@ -43,31 +43,56 @@ def format_result(result) :
 def consultation(btn) :
     global cur
     result = ""
+    window = ""
     message("requête en cours")
     if btn == "bcons1" :
+        window = "qresult"
         i = int(app.getEntry("econs_cid"))
         cmd = "SELECT * FROM liste_foyers_contrat(" + str(i) + ");"
         cur.execute(cmd)
     elif btn == "bcons2" :
+        window = "qresult"
         i = int(app.getEntry("econs_month"))
         cmd = "SELECT * FROM liste_livraisons_mois(" + str(i) + ");"
         cur.execute(cmd)
     
     elif btn == "bcons3":
+        window = "qresult"
         cmd = "SELECT * FROM liste_livraisons_sans_inscriptions();"
         cur.execute(cmd)        
     
     elif btn == "bcons4" :
+        window = "qresult"
         i = int(app.getEntry("econs_cli"))
         cmd = "SELECT * FROM calendrier_livraisons_contrats_adherent(" + str(i) + ");"
+        cur.execute(cmd)
+
+    elif btn == "bstat1":
+        window = "sresult"
+        cmd = "SELECT * FROM nombre_participations_annee(2018);"
+        cur.execute(cmd)
+
+    elif btn == "bstat2":
+        window = "sresult"
+        cmd = "SELECT * FROM somme_montants_contrats_foyer();"
+        cur.execute(cmd)
+
+    elif btn == "bstat3":
+        window = "sresult"
+        cmd = "SELECT * FROM prix_moyen_panier();"
+        cur.execute(cmd)
+
+    elif btn == "bstat4":
+        window = "sresult"
+        cmd = "SELECT * FROM revenu_moyen_mensuel();"
         cur.execute(cmd)
 
     else :
         error("something went wrong")
         return
     result = format_result(cur.fetchall())
-    app.clearTextArea("qresult")
-    app.setTextArea("qresult", result, end=True, callFunction=False)
+    app.clearTextArea(window)
+    app.setTextArea(window, result, end=True, callFunction=False)
     success("résultat de la requête affiché")
         
 def loginSubmit(btn):
@@ -283,7 +308,45 @@ app.setTextArea("qresult", "Ici le résultat des requêtes\n")
 app.stopTab()
 
 app.startTab("Statistiques")
-app.addLabel("l3", "Rien pour le moment")
+
+app.startLabelFrame("lfstat1", 0, 0, hideTitle=True)
+app.setSticky("news")
+app.setExpand("column")
+app.addLabel("lstat1", "Liste des adhérents avec le nombre de participations à des distributions au cours de l'année")
+app.addNamedButton("consulter", "bstat1", consultation)
+app.setButtonFg("bstat1", "black")
+app.setButtonBg("bstat1", "white")
+app.stopLabelFrame()
+
+app.startLabelFrame("lfstat2", 0, 1, hideTitle=True)
+app.setSticky("news")
+app.setExpand("column")
+app.addLabel("lstat2", "Somme des montatns de tous les contrats souscrits par chaque adhérent")
+app.addNamedButton("consulter", "bstat2", consultation)
+app.setButtonFg("bstat2", "black")
+app.setButtonBg("bstat2", "white")
+app.stopLabelFrame()
+
+app.startLabelFrame("lfstat3", 1, 0, hideTitle=True)
+app.setSticky("news")
+app.setExpand("column")
+app.addLabel("lstat3", "Pour chaque contrat, prix moyen d'un panier")
+app.addNamedButton("consulter", "bstat3", consultation)
+app.setButtonFg("bstat3", "black")
+app.setButtonBg("bstat3", "white")
+app.stopLabelFrame()
+
+app.startLabelFrame("lfstat4", 1, 1, hideTitle=True)
+app.setSticky("news")
+app.setExpand("column")
+app.addLabel("lstat4", "Pour chaque producteur, la somme moyenne qui lui est versée chaque mois")
+app.addNamedButton("consulter", "bstat4", consultation)
+app.setButtonFg("bstat4", "black")
+app.setButtonBg("bstat4", "white")
+app.stopLabelFrame()
+
+app.addScrolledTextArea("sresult", 2, 0, colspan=2)
+app.setTextArea("sresult", "Ici le résultat des requêtes\n")
 app.stopTab()
 
 app.startTab("Ajout")
