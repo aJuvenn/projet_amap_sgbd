@@ -3,6 +3,7 @@ from io import *
 import random
 
 ### Options ###
+
 N_ADDRESSES = 15 # Doit etre plus grand que le nombre de foyers/clients...
 N_PRODUCERS = 2
 N_FOYERS = 3
@@ -42,7 +43,18 @@ denrees = [('jambon', 'sans couenne', 'g'), ('laitue', 'fraîche', 'g'), ('lait'
 N_PANIERS = len(paniers)
 N_DENREES = len(denrees)
 
-
+def init(n_addr, n_pdr, n_foy, n_cli, n_ctrt) :
+    global N_ADDRESSES
+    N_ADDRESSES = n_addr
+    global N_PRODUCERS
+    N_PRODUCERS = n_pdr
+    global N_FOYERS
+    N_FOYERS = n_foy
+    global N_CLIENTS
+    N_CLIENTS = n_cli
+    global N_CONTRACTS
+    N_CONTRACTS = n_ctrt
+    
 comment_block_separator = '-- ==================================================\n'
 def comment_block(str) :
     res = comment_block_separator
@@ -225,58 +237,61 @@ def paniers_denrees() :
     return res
 
 # Main part of the program
-with open('peuplement.sql', 'wt') as f :
-    f.write(comment_block('Fichier généré par peuplement.py avec amour\nArsène'))
-    f.write('\n\n')
+def peuplement() :
+    with open('peuplement.sql', 'wt') as f :
+        f.write(comment_block('Fichier généré par peuplement.py avec amour\nArsène'))
+        f.write('\n\n')
+        
+        f.write('-- Tables définies par des couples/triplets de clefs étrangères\n')
+        f.write('DELETE FROM prevision_calendrier;\n')
+        f.write('DELETE FROM souscrire_a;\n')
+        f.write('DELETE FROM contenir;\n')
+        f.write('DELETE FROM appartenir_a;\n\n')
+        
+        f.write('-- Tables référencées par les tables précédentes\n')
+        f.write('DELETE FROM denree;\n')
+        f.write('DELETE FROM panier;\n')
+        f.write('DELETE FROM livraison;\n')
+        f.write('DELETE FROM client;\n')
+        f.write('DELETE FROM foyer;\n')
+        f.write('DELETE FROM contrat;\n')
+        f.write('DELETE FROM producteur;\n')
+        f.write('DELETE FROM adresse;\n\n')
+        
+        f.write('commit;\n')
+        
+        f.write('\n\n')
+        
+        f.write(comment_block('Création des données\n'))
+        f.write('\n')
+        f.write(comment_title('Adresses'))
+        for i in range(N_ADDRESSES) :
+            f.write(random_address())
+        f.write('commit;\n\n')
+        
+        f.write(comment_title('Producteurs'))
+        for i in range(N_PRODUCERS) :
+            f.write(random_producer())
+        f.write('commit;\n\n')
+        
+        f.write(comment_title('Foyers'))
+        for i in range(N_FOYERS) :
+            f.write(random_foyer())
+        f.write('commit;\n\n')
+        
+        f.write(comment_title('Clients'))
+        for i in range(N_CLIENTS) :
+            f.write(random_client())
+        f.write('commit;\n\n')
+            
+        f.write(comment_title('Paniers et denrées'))
+        f.write(paniers_denrees())
+        f.write('commit;\n\n')
+            
+        f.write(comment_title('Contrats + souscriptions + livraisons + prévisions calendrier'))
+        for i in range(N_CONTRACTS) :
+            f.write(random_contract())
+        f.write('commit;\n\n')
 
-    f.write('-- Tables définies par des couples/triplets de clefs étrangères\n')
-    f.write('DELETE FROM prevision_calendrier;\n')
-    f.write('DELETE FROM souscrire_a;\n')
-    f.write('DELETE FROM contenir;\n')
-    f.write('DELETE FROM appartenir_a;\n\n')
-    
-    f.write('-- Tables référencées par les tables précédentes\n')
-    f.write('DELETE FROM denree;\n')
-    f.write('DELETE FROM panier;\n')
-    f.write('DELETE FROM livraison;\n')
-    f.write('DELETE FROM client;\n')
-    f.write('DELETE FROM foyer;\n')
-    f.write('DELETE FROM contrat;\n')
-    f.write('DELETE FROM producteur;\n')
-    f.write('DELETE FROM adresse;\n\n')
-
-    f.write('commit;\n')
-    
-    f.write('\n\n')
-    
-    f.write(comment_block('Création des données\n'))
-    f.write('\n')
-    f.write(comment_title('Adresses'))
-    for i in range(N_ADDRESSES) :
-        f.write(random_address())
-    f.write('commit;\n\n')
-
-    f.write(comment_title('Producteurs'))
-    for i in range(N_PRODUCERS) :
-        f.write(random_producer())
-    f.write('commit;\n\n')
-
-    f.write(comment_title('Foyers'))
-    for i in range(N_FOYERS) :
-        f.write(random_foyer())
-    f.write('commit;\n\n')
-
-    f.write(comment_title('Clients'))
-    for i in range(N_CLIENTS) :
-        f.write(random_client())
-    f.write('commit;\n\n')
-
-    f.write(comment_title('Paniers et denrées'))
-    f.write(paniers_denrees())
-    f.write('commit;\n\n')
-    
-    f.write(comment_title('Contrats + souscriptions + livraisons + prévisions calendrier'))
-    for i in range(N_CONTRACTS) :
-        f.write(random_contract())
-    f.write('commit;\n\n')
-
+if __name__ == "__main__" :
+    peuplement()
