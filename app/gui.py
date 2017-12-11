@@ -34,6 +34,42 @@ def error(str) :
     app.setLabelBg("output", "red")
     app.setLabel("output", str)    
 
+def format_result(result) :
+    res = ''
+    for i in result :
+        res += str(i) + '\n'
+    return res
+    
+def consultation(btn) :
+    global cur
+    result = ""
+    message("requête en cours")
+    if btn == "bcons1" :
+        i = int(app.getEntry("econs_cid"))
+        cmd = "SELECT * FROM liste_foyers_contrat(" + str(i) + ");"
+        cur.execute(cmd)
+    elif btn == "bcons2" :
+        i = int(app.getEntry("econs_month"))
+        cmd = "SELECT * FROM liste_livraisons_mois(" + str(i) + ");"
+        cur.execute(cmd)
+    
+    elif btn == "bcons3":
+        cmd = "SELECT * FROM liste_livraisons_sans_inscriptions();"
+        cur.execute(cmd)        
+    
+    elif btn == "bcons4" :
+        i = int(app.getEntry("econs_cli"))
+        cmd = "SELECT * FROM calendrier_livraisons_contrats_adherent(" + str(i) + ");"
+        cur.execute(cmd)
+
+    else :
+        error("something went wrong")
+        return
+    result = format_result(cur.fetchall())
+    app.clearTextArea("qresult")
+    app.setTextArea("qresult", result, end=True, callFunction=False)
+    success("résultat de la requête affiché")
+        
 def loginSubmit(btn):
     global conn
     global cur
@@ -87,6 +123,7 @@ def peupler(btn):
     try :
         with open("./peuplement.sql", 'r') as f:
             for line in f:
+                print(line)
                 if len(line)==0 or line.isspace() or line.startswith("--"):
                     continue
                 if line.startswith("commit"):
@@ -192,9 +229,57 @@ app.stopLabelFrame()
 app.stopTab()
 
 app.startTab("Consultation")
-app.startLabelFrame("lfcons1", hideTitle=True)
 
+app.startLabelFrame("lfcons1", 0, 0, hideTitle=True)
+app.setSticky("news")
+app.setExpand("column")
+app.addLabel("lcons1", "Liste des adhérents ayant souscrits\n à un certain contrat")
+app.addNumericEntry("econs_cid")
+app.setEntryBg("econs_cid", "white")
+app.setEntryFg("econs_cid", "black")
+app.setEntryDefault("econs_cid", "id contrat")
+app.addNamedButton("consulter", "bcons1", consultation)
+app.setButtonFg("bcons1", "black")
+app.setButtonBg("bcons1", "white")
 app.stopLabelFrame()
+
+app.startLabelFrame("lfcons2", 0, 1, hideTitle=True)
+app.setSticky("news")
+app.setExpand("column")
+app.addLabel("lcons2", "Liste des livraisons prévues pour un certain mois (entrer le mois sous forme d'un entier)")
+app.addNumericEntry("econs_month")
+app.setEntryBg("econs_month", "white")
+app.setEntryFg("econs_month", "black")
+app.setEntryDefault("econs_month", "numero mois")
+app.addNamedButton("consulter", "bcons2", consultation)
+app.setButtonFg("bcons2", "black")
+app.setButtonBg("bcons2", "white")
+app.stopLabelFrame()
+
+app.startLabelFrame("lfcons3", 1, 0, hideTitle=True)
+app.setSticky("news")
+app.setExpand("column")
+app.addLabel("lcons3", "Liste des livraisons où personne n'est inscrit")
+app.addNamedButton("consulter", "bcons3", consultation)
+app.setButtonFg("bcons3", "black")
+app.setButtonBg("bcons3", "white")
+app.stopLabelFrame()
+
+app.startLabelFrame("lfcons4", 1, 1, hideTitle=True)
+app.setSticky("news")
+app.setExpand("column")
+app.addLabel("lcons4", "Calendrier des livraisons des contrats auxquels un client a souscrit")
+app.addNumericEntry("econs_cli")
+app.setEntryBg("econs_cli", "white")
+app.setEntryFg("econs_cli", "black")
+app.setEntryDefault("econs_cli", "id client")
+app.addNamedButton("consulter", "bcons4", consultation)
+app.setButtonFg("bcons4", "black")
+app.setButtonBg("bcons4", "white")
+app.stopLabelFrame()
+
+app.addScrolledTextArea("qresult", 2, 0, colspan=2)
+app.setTextArea("qresult", "Ici le résultat des requêtes\n")
 app.stopTab()
 
 app.startTab("Statistiques")
