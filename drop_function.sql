@@ -35,7 +35,7 @@ DROP FUNCTION supprime_table_adresse();
 DROP FUNCTION supprime_table_denree();
 DROP FUNCTION supprime_table_panier();
 DROP FUNCTION supprime_table_livraison();
-DROP FUNCTION supprime_table _client();
+DROP FUNCTION supprime_table_client();
 DROP FUNCTION supprime_table_foyer();
 DROP FUNCTION supprime_table_contrat();
 DROP FUNCTION supprime_table_producteur();

@@ -37,7 +37,9 @@ def error(str) :
 def format_result(result) :
     res = ''
     for i in result :
-        res += str(i) + '\n'
+        for j in i :
+            res += str(j) + '\t\t'
+        res += '\n'
     return res
     
 def consultation(btn) :
